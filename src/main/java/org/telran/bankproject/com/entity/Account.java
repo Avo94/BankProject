@@ -11,9 +11,9 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id", referencedColumnName = "id")
-    private List<Client> clientId = new ArrayList<>();
+    private Client clientId;
     private String name;
     private int type;
     private int status;
@@ -34,11 +34,11 @@ public class Account {
         this.id = id;
     }
 
-    public List<Client> getClientId() {
+    public Client getClientId() {
         return clientId;
     }
 
-    public void setClientId(List<Client> clientId) {
+    public void setClientId(Client clientId) {
         this.clientId = clientId;
     }
 

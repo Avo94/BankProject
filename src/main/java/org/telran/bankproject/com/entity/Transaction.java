@@ -9,10 +9,10 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "debit_account_id", referencedColumnName = "id")
     private Account debitAccountId;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "credit_account_id", referencedColumnName = "id")
     private Account creditAccountId;
     private int type;
