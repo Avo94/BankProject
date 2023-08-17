@@ -8,5 +8,9 @@ public interface ClientService {
 
     List<Client> getAll();
 
-    Client addClient(Client client);
+    Client getById(long id);
+
+    Client add(Client client);
+
+    void remove(long id);
 }

@@ -1,7 +1,7 @@
 package org.telran.bankproject.com.entity;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,13 +14,15 @@ public class Product {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
     private List<Manager> managerId = new ArrayList<>();
+    @OneToOne(mappedBy = "productId")
+    private Agreement agreement;
     private String name;
     private int status;
     private int currencyCode;
     private double interestRate;
     private int productLimit;
-    private Date createdAt;
-    private Date updatedAt;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     public Product() {
     }
@@ -39,6 +41,14 @@ public class Product {
 
     public void setManagerId(List<Manager> managerId) {
         this.managerId = managerId;
+    }
+
+    public Agreement getAgreement() {
+        return agreement;
+    }
+
+    public void setAgreement(Agreement agreement) {
+        this.agreement = agreement;
     }
 
     public String getName() {
@@ -81,34 +91,19 @@ public class Product {
         this.productLimit = productLimit;
     }
 
-    public Date getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public Timestamp getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", managerId=" + managerId +
-                ", name='" + name + '\'' +
-                ", status=" + status +
-                ", currencyCode=" + currencyCode +
-                ", interestRate=" + interestRate +
-                ", productLimit=" + productLimit +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
     }
 }

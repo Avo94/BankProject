@@ -1,0 +1,46 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd
+                   http://www.liquibase.org/xml/ns/dbchangelog-ext
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+    <changeSet id="202308171150456" author="Anton Vouk">
+        <comment>Add managers table</comment>
+        <createTable tableName="manager">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="manager_pkey"/>
+            </column>
+            <column name="first_name" type="VARCHAR(50)"/>
+            <column name="last_name" type="VARCHAR(50)"/>
+            <column name="status" type="INT(1)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="last_name" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="202308171155200" author="Anton Vouk">
+        <comment>Add clients table</comment>
+        <createTable tableName="client">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="client_pkey"/>
+            </column>
+            <column name="manager_id" type="BIGINT">
+                <constraints foreignKeyName="manager_fkey" referencedTableName="manager"
+                             referencedColumnNames="id" nullable="false"/>
+            </column>
+            <column name="status" type="INT(1)"/>
+            <column name="tax_code" type="VARCHAR(20)"/>
+            <column name="first_name" type="VARCHAR(50)"/>
+            <column name="last_name" type="VARCHAR(50)"/>
+            <column name="email" type="VARCHAR(60)"/>
+            <column name="address" type="VARCHAR(80)"/>
+            <column name="phone" type="VARCHAR(20)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

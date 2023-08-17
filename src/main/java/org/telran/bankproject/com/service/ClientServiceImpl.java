@@ -19,7 +19,17 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client addClient(Client client) {
+    public Client getById(long id) {
+        return clientRepository.getReferenceById(id);
+    }
+
+    @Override
+    public Client add(Client client) {
         return clientRepository.save(client);
+    }
+
+    @Override
+    public void remove(long id) {
+        clientRepository.deleteById(id);
     }
 }

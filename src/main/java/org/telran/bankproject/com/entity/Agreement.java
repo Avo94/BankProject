@@ -1,7 +1,7 @@
 package org.telran.bankproject.com.entity;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
 public class Agreement {
@@ -18,8 +18,8 @@ public class Agreement {
     private double interestRate;
     private int status;
     private double sum;
-    private Date createdAt;
-    private Date updatedAt;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     public Agreement() {
         //
@@ -73,33 +73,19 @@ public class Agreement {
         this.sum = sum;
     }
 
-    public Date getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public Timestamp getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    @Override
-    public String toString() {
-        return "Agreement{" +
-                "id=" + id +
-                ", accountId=" + accountId +
-                ", productId=" + productId +
-                ", interestRate=" + interestRate +
-                ", status=" + status +
-                ", sum=" + sum +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
     }
 }

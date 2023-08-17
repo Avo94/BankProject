@@ -1,9 +1,7 @@
 package org.telran.bankproject.com.entity;
 
 import javax.persistence.*;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Timestamp;
 
 @Entity
 public class Account {
@@ -14,13 +12,19 @@ public class Account {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client clientId;
+    @OneToOne(mappedBy = "accountId")
+    private Agreement agreement;
+    @OneToOne(mappedBy = "debitAccountId")
+    private Transaction debitTransaction;
+    @OneToOne(mappedBy = "creditAccountId")
+    private Transaction creditTransaction;
     private String name;
     private int type;
     private int status;
     private double balance;
     private int currencyCode;
-    private Date createdAt;
-    private Date updatedAt;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     public Account() {
         //
@@ -40,6 +44,30 @@ public class Account {
 
     public void setClientId(Client clientId) {
         this.clientId = clientId;
+    }
+
+    public Agreement getAgreement() {
+        return agreement;
+    }
+
+    public void setAgreement(Agreement agreement) {
+        this.agreement = agreement;
+    }
+
+    public Transaction getDebitTransaction() {
+        return debitTransaction;
+    }
+
+    public void setDebitTransaction(Transaction debitTransaction) {
+        this.debitTransaction = debitTransaction;
+    }
+
+    public Transaction getCreditTransaction() {
+        return creditTransaction;
+    }
+
+    public void setCreditTransaction(Transaction creditTransaction) {
+        this.creditTransaction = creditTransaction;
     }
 
     public String getName() {
@@ -82,34 +110,19 @@ public class Account {
         this.currencyCode = currencyCode;
     }
 
-    public Date getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public Timestamp getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    @Override
-    public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", clientId=" + clientId +
-                ", name='" + name + '\'' +
-                ", type=" + type +
-                ", status=" + status +
-                ", balance=" + balance +
-                ", currencyCode=" + currencyCode +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
     }
 }
