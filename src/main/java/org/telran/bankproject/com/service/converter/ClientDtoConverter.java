@@ -9,7 +9,7 @@ public class ClientDtoConverter implements DtoConverter<Client, ClientDto> {
 
     @Override
     public ClientDto toDto(Client client) {
-        return new ClientDto(client.getId(), client.getStatus(), client.getFirstName(), client.getLastName(), client.getEmail());
+        return new ClientDto(client.getManagerId(), client.getAccounts(), client.getFirstName(), client.getLastName(), client.getEmail(), client.getPhone());
     }
 
     @Override

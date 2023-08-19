@@ -1,40 +1,48 @@
 package org.telran.bankproject.com.dto;
 
+import org.telran.bankproject.com.entity.Account;
+import org.telran.bankproject.com.entity.Manager;
+
+import java.util.List;
+
 public class ClientDto {
 
-    private long id;
-    private int status;
+    private Manager managerId;
+    private List<Account> accounts;
     private String firstName;
     private String lastName;
     private String email;
+    private String phone;
 
-    public ClientDto(long id, int status, String firstName, String lastName, String email) {
-        this.id = id;
-        this.status = status;
+    public ClientDto(Manager managerId, List<Account> accounts, String firstName, String lastName, String email, String phone) {
+        this.managerId = managerId;
+        this.accounts = accounts;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.phone = phone;
     }
 
     public ClientDto() {
         //
     }
 
-    public long getId() {
-        return id;
+    public Manager getManagerId() {
+        return managerId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setManagerId(Manager managerId) {
+        this.managerId = managerId;
     }
 
-    public int getStatus() {
-        return status;
+    public List<Account> getAccounts() {
+        return accounts;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
     }
+
 
     public String getFirstName() {
         return firstName;
@@ -58,5 +66,13 @@ public class ClientDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

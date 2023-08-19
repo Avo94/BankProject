@@ -1,31 +1,47 @@
 package org.telran.bankproject.com.dto;
 
+import org.telran.bankproject.com.entity.Agreement;
+import org.telran.bankproject.com.entity.Manager;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProductDto {
 
-    private long id;
+    private List<Manager> managerId = new ArrayList<>();
+    private Agreement agreement;
     private String name;
-    private int status;
     private int currencyCode;
     private double interestRate;
+    private int productLimit;
 
-    public ProductDto(long id, String name, int status, int currencyCode, double interestRate) {
-        this.id = id;
+    public ProductDto(List<Manager> managerId, Agreement agreement, String name, int currencyCode, double interestRate, int productLimit) {
+        this.managerId = managerId;
+        this.agreement = agreement;
         this.name = name;
-        this.status = status;
         this.currencyCode = currencyCode;
         this.interestRate = interestRate;
+        this.productLimit = productLimit;
     }
 
     public ProductDto() {
         //
     }
 
-    public long getId() {
-        return id;
+    public List<Manager> getManagerId() {
+        return managerId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setManagerId(List<Manager> managerId) {
+        this.managerId = managerId;
+    }
+
+    public Agreement getAgreement() {
+        return agreement;
+    }
+
+    public void setAgreement(Agreement agreement) {
+        this.agreement = agreement;
     }
 
     public String getName() {
@@ -34,14 +50,6 @@ public class ProductDto {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 
     public int getCurrencyCode() {
@@ -58,5 +66,13 @@ public class ProductDto {
 
     public void setInterestRate(double interestRate) {
         this.interestRate = interestRate;
+    }
+
+    public int getProductLimit() {
+        return productLimit;
+    }
+
+    public void setProductLimit(int productLimit) {
+        this.productLimit = productLimit;
     }
 }

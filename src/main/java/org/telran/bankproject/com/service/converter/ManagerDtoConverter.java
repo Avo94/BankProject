@@ -9,7 +9,7 @@ public class ManagerDtoConverter implements DtoConverter<Manager, ManagerDto> {
 
     @Override
     public ManagerDto toDto(Manager manager) {
-        return new ManagerDto(manager.getId(), manager.getFirstName(), manager.getLastName());
+        return new ManagerDto(manager.getClients(),manager.getProduct(), manager.getFirstName(), manager.getLastName());
     }
 
     @Override

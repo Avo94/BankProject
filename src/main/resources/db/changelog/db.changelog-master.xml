@@ -6,9 +6,8 @@
                    http://www.liquibase.org/xml/ns/dbchangelog-ext
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-
-    <changeSet id="202308171150456" author="Anton Vouk">
-        <comment>Add managers table</comment>
+    <changeSet id="202308171050456" author="Anton Vouk">
+        <comment>Add manager table</comment>
         <createTable tableName="manager">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false" primaryKeyName="manager_pkey"/>
@@ -17,18 +16,18 @@
             <column name="last_name" type="VARCHAR(50)"/>
             <column name="status" type="INT(1)"/>
             <column name="created_at" type="TIMESTAMP"/>
-            <column name="last_name" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
         </createTable>
     </changeSet>
 
-    <changeSet id="202308171155200" author="Anton Vouk">
-        <comment>Add clients table</comment>
+    <changeSet id="202308171105200" author="Anton Vouk">
+        <comment>Add client table</comment>
         <createTable tableName="client">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false" primaryKeyName="client_pkey"/>
             </column>
             <column name="manager_id" type="BIGINT">
-                <constraints foreignKeyName="manager_fkey" referencedTableName="manager"
+                <constraints foreignKeyName="client_manager_fkey" referencedTableName="manager"
                              referencedColumnNames="id" nullable="false"/>
             </column>
             <column name="status" type="INT(1)"/>
@@ -43,4 +42,86 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="202308171141559" author="Anton Vouk">
+        <comment>Add account table</comment>
+        <createTable tableName="account">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="account_pkey"/>
+            </column>
+            <column name="client_id" type="BIGINT">
+                <constraints foreignKeyName="account_client_fkey" referencedTableName="client"
+                             referencedColumnNames="id" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(100)"/>
+            <column name="type" type="INT(1)"/>
+            <column name="status" type="INT(1)"/>
+            <column name="balance" type="DECIMAL(15,2)"/>
+            <column name="currency_code" type="INT(2)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="202308171224828" author="Anton Vouk">
+        <comment>Add transaction table</comment>
+        <createTable tableName="transaction">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="transaction_pkey"/>
+            </column>
+            <column name="debit_account_id" type="BIGINT">
+                <constraints foreignKeyName="transaction_account_one_fkey" referencedTableName="account"
+                             referencedColumnNames="id" nullable="false"/>
+            </column>
+            <column name="credit_account_id" type="BIGINT">
+                <constraints foreignKeyName="transaction_account_two_fkey" referencedTableName="account"
+                             referencedColumnNames="id" nullable="false"/>
+            </column>
+            <column name="type" type="INT(1)"/>
+            <column name="amount" type="DECIMAL(12,4)"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="202308171826181" author="Anton Vouk">
+        <comment>Add product table</comment>
+        <createTable tableName="product">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="product_pkey"/>
+            </column>
+            <column name="manager_id" type="BIGINT">
+                <constraints foreignKeyName="product_manager_fkey" referencedTableName="manager"
+                             referencedColumnNames="id" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(70)"/>
+            <column name="status" type="INT(1)"/>
+            <column name="currency_code" type="INT(2)"/>
+            <column name="interest_rate" type="DECIMAL(6,4)"/>
+            <column name="product_limit" type="INT"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="202308171856215" author="Anton Vouk">
+        <comment>Add agreement table</comment>
+        <createTable tableName="agreement">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="agreement_pkey"/>
+            </column>
+            <column name="account_id" type="BIGINT">
+                <constraints foreignKeyName="agreement_account_fkey" referencedTableName="account"
+                             referencedColumnNames="id" nullable="false"/>
+            </column>
+            <column name="product_id" type="BIGINT">
+                <constraints foreignKeyName="agreement_product_fkey" referencedTableName="product"
+                             referencedColumnNames="id" nullable="false"/>
+            </column>
+            <column name="interest_rate" type="DECIMAL(6,4)"/>
+            <column name="status" type="INT(1)"/>
+            <column name="sum" type="DECIMAL(15,2)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

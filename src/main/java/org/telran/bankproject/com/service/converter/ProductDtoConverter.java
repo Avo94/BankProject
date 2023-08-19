@@ -9,7 +9,7 @@ public class ProductDtoConverter implements DtoConverter<Product, ProductDto> {
 
     @Override
     public ProductDto toDto(Product product) {
-        return new ProductDto(product.getId(), product.getName(), product.getStatus(), product.getCurrencyCode(), product.getInterestRate());
+        return new ProductDto(product.getManagerId(), product.getAgreement(), product.getName(), product.getCurrencyCode(), product.getInterestRate(), product.getProductLimit());
     }
 
     @Override

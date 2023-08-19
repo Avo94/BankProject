@@ -1,15 +1,22 @@
 package org.telran.bankproject.com.dto;
 
+import org.telran.bankproject.com.entity.Agreement;
+import org.telran.bankproject.com.entity.Client;
+
 public class AccountDto {
 
-    private long id;
+    private Client clientId;
+    private Agreement agreement;
     private String name;
+    private int type;
     private double balance;
     private int currencyCode;
 
-    public AccountDto(long id, String name, double balance, int currencyCode) {
-        this.id = id;
+    public AccountDto(Client clientId, Agreement agreement, String name, int type, double balance, int currencyCode) {
+        this.clientId = clientId;
+        this.agreement = agreement;
         this.name = name;
+        this.type = type;
         this.balance = balance;
         this.currencyCode = currencyCode;
     }
@@ -18,12 +25,20 @@ public class AccountDto {
         //
     }
 
-    public long getId() {
-        return id;
+    public Client getClientId() {
+        return clientId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setClientId(Client clientId) {
+        this.clientId = clientId;
+    }
+
+    public Agreement getAgreement() {
+        return agreement;
+    }
+
+    public void setAgreement(Agreement agreement) {
+        this.agreement = agreement;
     }
 
     public String getName() {
@@ -32,6 +47,14 @@ public class AccountDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public double getBalance() {

@@ -9,7 +9,7 @@ public class AccountDtoConverter implements DtoConverter<Account, AccountDto> {
 
     @Override
     public AccountDto toDto(Account account) {
-        return new AccountDto(account.getId(), account.getName(), account.getBalance(), account.getCurrencyCode());
+        return new AccountDto(account.getClientId(), account.getAgreement(), account.getName(), account.getType(), account.getBalance(), account.getCurrencyCode());
     }
 
     @Override
