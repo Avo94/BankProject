@@ -1,5 +1,8 @@
 package org.telran.bankproject.com.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
@@ -12,8 +15,10 @@ public class Client {
     private long id;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
+    @JsonManagedReference
     private Manager managerId;
     @OneToMany(mappedBy = "clientId")
+    @JsonBackReference
     private List<Account> accounts;
     private int status;
     private String taxCode;
@@ -24,6 +29,23 @@ public class Client {
     private String phone;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+
+    public Client(long id, Manager managerId, List<Account> accounts, int status, String taxCode,
+                  String firstName, String lastName, String email, String address, String phone,
+                  Timestamp createdAt, Timestamp updatedAt) {
+        this.id = id;
+        this.managerId = managerId;
+        this.accounts = accounts;
+        this.status = status;
+        this.taxCode = taxCode;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.address = address;
+        this.phone = phone;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 
     public Client() {
         //

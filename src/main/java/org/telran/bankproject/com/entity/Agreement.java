@@ -1,5 +1,7 @@
 package org.telran.bankproject.com.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -11,9 +13,11 @@ public class Agreement {
     private long id;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
+    @JsonManagedReference
     private Account accountId;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @JsonManagedReference
     private Product productId;
     private double interestRate;
     private int status;

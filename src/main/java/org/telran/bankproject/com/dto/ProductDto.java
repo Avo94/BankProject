@@ -15,7 +15,8 @@ public class ProductDto {
     private double interestRate;
     private int productLimit;
 
-    public ProductDto(List<Manager> managerId, Agreement agreement, String name, int currencyCode, double interestRate, int productLimit) {
+    public ProductDto(List<Manager> managerId, Agreement agreement, String name, int currencyCode,
+                      double interestRate, int productLimit) {
         this.managerId = managerId;
         this.agreement = agreement;
         this.name = name;

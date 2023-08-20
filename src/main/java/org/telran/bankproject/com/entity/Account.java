@@ -1,7 +1,11 @@
 package org.telran.bankproject.com.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 public class Account {
@@ -11,13 +15,17 @@ public class Account {
     private long id;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id", referencedColumnName = "id")
+    @JsonManagedReference
     private Client clientId;
     @OneToOne(mappedBy = "accountId")
+    @JsonBackReference
     private Agreement agreement;
-    @OneToOne(mappedBy = "debitAccountId")
-    private Transaction debitTransaction;
-    @OneToOne(mappedBy = "creditAccountId")
-    private Transaction creditTransaction;
+    @OneToMany(mappedBy = "debitAccountId")
+    @JsonBackReference
+    private List<Transaction> debitTransaction;
+    @OneToMany(mappedBy = "creditAccountId")
+    @JsonBackReference
+    private List<Transaction> creditTransaction;
     private String name;
     private int type;
     private int status;
@@ -25,6 +33,23 @@ public class Account {
     private int currencyCode;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+
+    public Account(long id, Client clientId, Agreement agreement, List<Transaction> debitTransaction,
+                   List<Transaction> creditTransaction, String name, int type, int status,
+                   double balance, int currencyCode, Timestamp createdAt, Timestamp updatedAt) {
+        this.id = id;
+        this.clientId = clientId;
+        this.agreement = agreement;
+        this.debitTransaction = debitTransaction;
+        this.creditTransaction = creditTransaction;
+        this.name = name;
+        this.type = type;
+        this.status = status;
+        this.balance = balance;
+        this.currencyCode = currencyCode;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 
     public Account() {
         //
@@ -54,19 +79,20 @@ public class Account {
         this.agreement = agreement;
     }
 
-    public Transaction getDebitTransaction() {
+    public List<Transaction> getDebitTransaction() {
         return debitTransaction;
     }
 
-    public void setDebitTransaction(Transaction debitTransaction) {
+    public void setDebitTransaction(List<Transaction> debitTransaction)
+    {
         this.debitTransaction = debitTransaction;
     }
 
-    public Transaction getCreditTransaction() {
+    public List<Transaction> getCreditTransaction() {
         return creditTransaction;
     }
 
-    public void setCreditTransaction(Transaction creditTransaction) {
+    public void setCreditTransaction(List<Transaction> creditTransaction) {
         this.creditTransaction = creditTransaction;
     }
 

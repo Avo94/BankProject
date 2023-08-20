@@ -18,21 +18,21 @@ public class ManagerController {
     private ManagerService managerService;
 
     @Autowired
-    private DtoConverter<Manager, ManagerDto> converter;
+    private DtoConverter<Manager, ManagerDto> managerConverter;
 
     @GetMapping
     public List<ManagerDto> getAll() {
-        return managerService.getAll().stream().map(manager -> converter.toDto(manager)).collect(Collectors.toList());
+        return managerService.getAll().stream().map(manager -> managerConverter.toDto(manager)).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public ManagerDto getById(@PathVariable(name = "id") long id) {
-        return converter.toDto(managerService.getById(id));
+        return managerConverter.toDto(managerService.getById(id));
     }
 
     @PostMapping
-    public Manager addClient(@RequestBody Manager manager) {
-        return managerService.add(manager);
+    public Manager addClient(@RequestBody ManagerDto manager) {
+        return managerService.add(managerConverter.toEntity(manager));
     }
 
     @DeleteMapping("/{id}")

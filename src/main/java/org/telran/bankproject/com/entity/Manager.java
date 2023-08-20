@@ -1,5 +1,7 @@
 package org.telran.bankproject.com.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -12,14 +14,28 @@ public class Manager {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @OneToMany(mappedBy = "managerId")
+    @JsonBackReference
     private List<Client> clients = new ArrayList<>();
     @ManyToOne
+    @JsonBackReference
     private Product product;
     private String firstName;
     private String lastName;
     private int status;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+
+    public Manager(long id, List<Client> clients, Product product, String firstName, String lastName,
+                   int status, Timestamp createdAt, Timestamp updatedAt) {
+        this.id = id;
+        this.clients = clients;
+        this.product = product;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 
     public Manager() {
         //

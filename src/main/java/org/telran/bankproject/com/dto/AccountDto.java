@@ -2,27 +2,49 @@ package org.telran.bankproject.com.dto;
 
 import org.telran.bankproject.com.entity.Agreement;
 import org.telran.bankproject.com.entity.Client;
+import org.telran.bankproject.com.entity.Transaction;
+
+import java.util.List;
 
 public class AccountDto {
 
+
+    private long id;
     private Client clientId;
     private Agreement agreement;
+    private List<Transaction> debitTransaction;
+    private List<Transaction> creditTransaction;
     private String name;
     private int type;
+    private int status;
     private double balance;
     private int currencyCode;
 
-    public AccountDto(Client clientId, Agreement agreement, String name, int type, double balance, int currencyCode) {
+    public AccountDto(long id, Client clientId, Agreement agreement, List<Transaction> debitTransaction,
+                      List<Transaction> creditTransaction, String name, int type, int status,
+                      double balance, int currencyCode) {
+        this.id = id;
         this.clientId = clientId;
         this.agreement = agreement;
+        this.debitTransaction = debitTransaction;
+        this.creditTransaction = creditTransaction;
         this.name = name;
         this.type = type;
+        this.status = status;
         this.balance = balance;
         this.currencyCode = currencyCode;
     }
 
     public AccountDto() {
         //
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Client getClientId() {
@@ -41,6 +63,22 @@ public class AccountDto {
         this.agreement = agreement;
     }
 
+    public List<Transaction> getDebitTransaction() {
+        return debitTransaction;
+    }
+
+    public void setDebitTransaction(List<Transaction> debitTransaction) {
+        this.debitTransaction = debitTransaction;
+    }
+
+    public List<Transaction> getCreditTransaction() {
+        return creditTransaction;
+    }
+
+    public void setCreditTransaction(List<Transaction> creditTransaction) {
+        this.creditTransaction = creditTransaction;
+    }
+
     public String getName() {
         return name;
     }
@@ -55,6 +93,14 @@ public class AccountDto {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public double getBalance() {

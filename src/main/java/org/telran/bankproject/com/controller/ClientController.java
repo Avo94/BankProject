@@ -18,21 +18,21 @@ public class ClientController {
     private ClientService clientService;
 
     @Autowired
-    private DtoConverter<Client, ClientDto> converter;
+    private DtoConverter<Client, ClientDto> clientConverter;
 
     @GetMapping
     public List<ClientDto> getAll() {
-        return clientService.getAll().stream().map(client -> converter.toDto(client)).collect(Collectors.toList());
+        return clientService.getAll().stream().map(client -> clientConverter.toDto(client)).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public ClientDto getById(@PathVariable(name = "id") long id) {
-        return converter.toDto(clientService.getById(id));
+        return clientConverter.toDto(clientService.getById(id));
     }
 
     @PostMapping
-    public Client addClient(@RequestBody Client client) {
-        return clientService.add(client);
+    public Client addClient(@RequestBody ClientDto client) {
+        return clientService.add(clientConverter.toEntity(client));
     }
 
     @DeleteMapping("/{id}")

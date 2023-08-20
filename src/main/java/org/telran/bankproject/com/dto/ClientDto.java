@@ -7,24 +7,41 @@ import java.util.List;
 
 public class ClientDto {
 
+    private long id;
     private Manager managerId;
     private List<Account> accounts;
+    private int status;
+    private String taxCode;
     private String firstName;
     private String lastName;
     private String email;
+    private String address;
     private String phone;
 
-    public ClientDto(Manager managerId, List<Account> accounts, String firstName, String lastName, String email, String phone) {
+    public ClientDto(long id, Manager managerId, List<Account> accounts, int status, String taxCode,
+                     String firstName, String lastName, String email, String address, String phone) {
+        this.id = id;
         this.managerId = managerId;
         this.accounts = accounts;
+        this.status = status;
+        this.taxCode = taxCode;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.address = address;
         this.phone = phone;
     }
 
     public ClientDto() {
         //
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Manager getManagerId() {
@@ -43,6 +60,21 @@ public class ClientDto {
         this.accounts = accounts;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getTaxCode() {
+        return taxCode;
+    }
+
+    public void setTaxCode(String taxCode) {
+        this.taxCode = taxCode;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -66,6 +98,14 @@ public class ClientDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getPhone() {

@@ -1,5 +1,8 @@
 package org.telran.bankproject.com.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -13,8 +16,10 @@ public class Product {
     private long id;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
+    @JsonManagedReference
     private List<Manager> managerId = new ArrayList<>();
     @OneToOne(mappedBy = "productId")
+    @JsonBackReference
     private Agreement agreement;
     private String name;
     private int status;
