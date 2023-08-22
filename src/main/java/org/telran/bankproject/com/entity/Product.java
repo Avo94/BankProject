@@ -2,6 +2,8 @@ package org.telran.bankproject.com.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.telran.bankproject.com.enums.CurrencyCode;
+import org.telran.bankproject.com.enums.Status;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -14,20 +16,37 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
-    @JsonManagedReference
     private List<Manager> managerId = new ArrayList<>();
-    @OneToOne(mappedBy = "productId")
     @JsonBackReference
+    @OneToOne(mappedBy = "productId")
     private Agreement agreement;
     private String name;
-    private int status;
-    private int currencyCode;
+    @Enumerated(value = EnumType.STRING)
+    private Status status;
+    @Enumerated(value = EnumType.STRING)
+    private CurrencyCode currencyCode;
     private double interestRate;
     private int productLimit;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+
+    public Product(long id, List<Manager> managerId, Agreement agreement, String name, Status status,
+                   CurrencyCode currencyCode, double interestRate, int productLimit,
+                   Timestamp createdAt, Timestamp updatedAt) {
+        this.id = id;
+        this.managerId = managerId;
+        this.agreement = agreement;
+        this.name = name;
+        this.status = status;
+        this.currencyCode = currencyCode;
+        this.interestRate = interestRate;
+        this.productLimit = productLimit;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 
     public Product() {
     }
@@ -64,19 +83,19 @@ public class Product {
         this.name = name;
     }
 
-    public int getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    public int getCurrencyCode() {
+    public CurrencyCode getCurrencyCode() {
         return currencyCode;
     }
 
-    public void setCurrencyCode(int currencyCode) {
+    public void setCurrencyCode(CurrencyCode currencyCode) {
         this.currencyCode = currencyCode;
     }
 

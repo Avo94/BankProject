@@ -2,6 +2,9 @@ package org.telran.bankproject.com.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.telran.bankproject.com.enums.CurrencyCode;
+import org.telran.bankproject.com.enums.Status;
+import org.telran.bankproject.com.enums.Type;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -13,30 +16,33 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @JsonManagedReference
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id", referencedColumnName = "id")
-    @JsonManagedReference
     private Client clientId;
+    @JsonBackReference
     @OneToOne(mappedBy = "accountId")
-    @JsonBackReference
     private Agreement agreement;
+    @JsonBackReference
     @OneToMany(mappedBy = "debitAccountId")
-    @JsonBackReference
     private List<Transaction> debitTransaction;
-    @OneToMany(mappedBy = "creditAccountId")
     @JsonBackReference
+    @OneToMany(mappedBy = "creditAccountId")
     private List<Transaction> creditTransaction;
     private String name;
-    private int type;
-    private int status;
+    @Enumerated(value = EnumType.STRING)
+    private Type type;
+    @Enumerated(value = EnumType.STRING)
+    private Status status;
     private double balance;
-    private int currencyCode;
+    @Enumerated(value = EnumType.STRING)
+    private CurrencyCode currencyCode;
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
     public Account(long id, Client clientId, Agreement agreement, List<Transaction> debitTransaction,
-                   List<Transaction> creditTransaction, String name, int type, int status,
-                   double balance, int currencyCode, Timestamp createdAt, Timestamp updatedAt) {
+                   List<Transaction> creditTransaction, String name, Type type, Status status,
+                   double balance, CurrencyCode currencyCode, Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
         this.clientId = clientId;
         this.agreement = agreement;
@@ -83,8 +89,7 @@ public class Account {
         return debitTransaction;
     }
 
-    public void setDebitTransaction(List<Transaction> debitTransaction)
-    {
+    public void setDebitTransaction(List<Transaction> debitTransaction) {
         this.debitTransaction = debitTransaction;
     }
 
@@ -104,19 +109,19 @@ public class Account {
         this.name = name;
     }
 
-    public int getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
-    public int getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -128,11 +133,11 @@ public class Account {
         this.balance = balance;
     }
 
-    public int getCurrencyCode() {
+    public CurrencyCode getCurrencyCode() {
         return currencyCode;
     }
 
-    public void setCurrencyCode(int currencyCode) {
+    public void setCurrencyCode(CurrencyCode currencyCode) {
         this.currencyCode = currencyCode;
     }
 

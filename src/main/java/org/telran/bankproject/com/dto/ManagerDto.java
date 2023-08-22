@@ -2,6 +2,7 @@ package org.telran.bankproject.com.dto;
 
 import org.telran.bankproject.com.entity.Client;
 import org.telran.bankproject.com.entity.Product;
+import org.telran.bankproject.com.enums.Status;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +14,9 @@ public class ManagerDto {
     private Product product;
     private String firstName;
     private String lastName;
-    private int status;
+    private Status status;
 
-    public ManagerDto(long id, List<Client> clients, Product product, String firstName, String lastName, int status) {
+    public ManagerDto(long id, List<Client> clients, Product product, String firstName, String lastName, Status status) {
         this.id = id;
         this.clients = clients;
         this.product = product;
@@ -68,11 +69,11 @@ public class ManagerDto {
         this.lastName = lastName;
     }
 
-    public int getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 }

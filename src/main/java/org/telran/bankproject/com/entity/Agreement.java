@@ -1,6 +1,7 @@
 package org.telran.bankproject.com.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.telran.bankproject.com.enums.Status;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -20,10 +21,23 @@ public class Agreement {
     @JsonManagedReference
     private Product productId;
     private double interestRate;
-    private int status;
+    @Enumerated(value = EnumType.STRING)
+    private Status status;
     private double sum;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+
+    public Agreement(long id, Account accountId, Product productId, double interestRate, Status status,
+                     double sum, Timestamp createdAt, Timestamp updatedAt) {
+        this.id = id;
+        this.accountId = accountId;
+        this.productId = productId;
+        this.interestRate = interestRate;
+        this.status = status;
+        this.sum = sum;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 
     public Agreement() {
         //
@@ -61,11 +75,11 @@ public class Agreement {
         this.interestRate = interestRate;
     }
 
-    public int getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

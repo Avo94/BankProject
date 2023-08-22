@@ -3,11 +3,13 @@ package org.telran.bankproject.com.dto;
 import org.telran.bankproject.com.entity.Agreement;
 import org.telran.bankproject.com.entity.Client;
 import org.telran.bankproject.com.entity.Transaction;
+import org.telran.bankproject.com.enums.CurrencyCode;
+import org.telran.bankproject.com.enums.Status;
+import org.telran.bankproject.com.enums.Type;
 
 import java.util.List;
 
 public class AccountDto {
-
 
     private long id;
     private Client clientId;
@@ -15,14 +17,14 @@ public class AccountDto {
     private List<Transaction> debitTransaction;
     private List<Transaction> creditTransaction;
     private String name;
-    private int type;
-    private int status;
+    private Type type;
+    private Status status;
     private double balance;
-    private int currencyCode;
+    private CurrencyCode currencyCode;
 
     public AccountDto(long id, Client clientId, Agreement agreement, List<Transaction> debitTransaction,
-                      List<Transaction> creditTransaction, String name, int type, int status,
-                      double balance, int currencyCode) {
+                      List<Transaction> creditTransaction, String name, Type type, Status status,
+                      double balance, CurrencyCode currencyCode) {
         this.id = id;
         this.clientId = clientId;
         this.agreement = agreement;
@@ -87,19 +89,19 @@ public class AccountDto {
         this.name = name;
     }
 
-    public int getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
-    public int getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -111,11 +113,11 @@ public class AccountDto {
         this.balance = balance;
     }
 
-    public int getCurrencyCode() {
+    public CurrencyCode getCurrencyCode() {
         return currencyCode;
     }
 
-    public void setCurrencyCode(int currencyCode) {
+    public void setCurrencyCode(CurrencyCode currencyCode) {
         this.currencyCode = currencyCode;
     }
 }

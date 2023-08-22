@@ -1,6 +1,7 @@
 package org.telran.bankproject.com.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.telran.bankproject.com.enums.Type;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -11,18 +12,30 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @JsonManagedReference
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "debit_account_id", referencedColumnName = "id")
-    @JsonManagedReference
     private Account debitAccountId;
+    @JsonManagedReference
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "credit_account_id", referencedColumnName = "id")
-    @JsonManagedReference
     private Account creditAccountId;
-    private int type;
+    @Enumerated(value = EnumType.STRING)
+    private Type type;
     private double amount;
     private String description;
     private Timestamp createdAt;
+
+    public Transaction(long id, Account debitAccountId, Account creditAccountId, Type type,
+                       double amount, String description, Timestamp createdAt) {
+        this.id = id;
+        this.debitAccountId = debitAccountId;
+        this.creditAccountId = creditAccountId;
+        this.type = type;
+        this.amount = amount;
+        this.description = description;
+        this.createdAt = createdAt;
+    }
 
     public Transaction() {
         //
@@ -52,11 +65,11 @@ public class Transaction {
         this.creditAccountId = creditAccountId;
     }
 
-    public int getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Type type) {
         this.type = type;
     }
 

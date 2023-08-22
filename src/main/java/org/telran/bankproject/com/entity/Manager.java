@@ -1,6 +1,7 @@
 package org.telran.bankproject.com.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.telran.bankproject.com.enums.Status;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -13,20 +14,21 @@ public class Manager {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @JsonBackReference
     @OneToMany(mappedBy = "managerId")
-    @JsonBackReference
     private List<Client> clients = new ArrayList<>();
-    @ManyToOne
     @JsonBackReference
+    @ManyToOne
     private Product product;
     private String firstName;
     private String lastName;
-    private int status;
+    @Enumerated(value = EnumType.STRING)
+    private Status status;
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
     public Manager(long id, List<Client> clients, Product product, String firstName, String lastName,
-                   int status, Timestamp createdAt, Timestamp updatedAt) {
+                   Status status, Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
         this.clients = clients;
         this.product = product;
@@ -81,11 +83,11 @@ public class Manager {
         this.lastName = lastName;
     }
 
-    public int getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

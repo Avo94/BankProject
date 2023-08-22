@@ -2,16 +2,17 @@ package org.telran.bankproject.com.dto;
 
 import org.telran.bankproject.com.entity.Account;
 import org.telran.bankproject.com.entity.Product;
+import org.telran.bankproject.com.enums.Type;
 
 public class AgreementDto {
 
     private Account accountId;
     private Product productId;
-    private int type;
+    private Type type;
     private double amount;
     private String description;
 
-    public AgreementDto(Account accountId, Product productId, int type, double amount, String description) {
+    public AgreementDto(Account accountId, Product productId, Type type, double amount, String description) {
         this.accountId = accountId;
         this.productId = productId;
         this.type = type;
@@ -39,11 +40,11 @@ public class AgreementDto {
         this.productId = productId;
     }
 
-    public int getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Type type) {
         this.type = type;
     }
 

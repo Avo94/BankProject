@@ -1,6 +1,7 @@
 package org.telran.bankproject.com.dto;
 
 import org.telran.bankproject.com.entity.Account;
+import org.telran.bankproject.com.enums.Type;
 
 import java.sql.Timestamp;
 
@@ -9,12 +10,12 @@ public class TransactionDto {
     private long id;
     private Account debitAccountId;
     private Account creditAccountId;
-    private int type;
+    private Type type;
     private double amount;
     private String description;
     private Timestamp createdAt;
 
-    public TransactionDto(long id, Account debitAccountId, Account creditAccountId, int type,
+    public TransactionDto(long id, Account debitAccountId, Account creditAccountId, Type type,
                           double amount, String description, Timestamp createdAt) {
         this.id = id;
         this.debitAccountId = debitAccountId;
@@ -41,7 +42,7 @@ public class TransactionDto {
         return creditAccountId;
     }
 
-    public int getType() {
+    public Type getType() {
         return type;
     }
 

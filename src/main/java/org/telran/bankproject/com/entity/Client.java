@@ -2,6 +2,7 @@ package org.telran.bankproject.com.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.telran.bankproject.com.enums.Status;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -13,14 +14,15 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @JsonManagedReference
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
-    @JsonManagedReference
     private Manager managerId;
-    @OneToMany(mappedBy = "clientId")
     @JsonBackReference
+    @OneToMany(mappedBy = "clientId")
     private List<Account> accounts;
-    private int status;
+    @Enumerated(value = EnumType.STRING)
+    private Status status;
     private String taxCode;
     private String firstName;
     private String lastName;
@@ -30,7 +32,7 @@ public class Client {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    public Client(long id, Manager managerId, List<Account> accounts, int status, String taxCode,
+    public Client(long id, Manager managerId, List<Account> accounts, Status status, String taxCode,
                   String firstName, String lastName, String email, String address, String phone,
                   Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
@@ -75,11 +77,11 @@ public class Client {
         this.accounts = accounts;
     }
 
-    public int getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

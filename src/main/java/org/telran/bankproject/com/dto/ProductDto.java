@@ -2,6 +2,7 @@ package org.telran.bankproject.com.dto;
 
 import org.telran.bankproject.com.entity.Agreement;
 import org.telran.bankproject.com.entity.Manager;
+import org.telran.bankproject.com.enums.CurrencyCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +12,11 @@ public class ProductDto {
     private List<Manager> managerId = new ArrayList<>();
     private Agreement agreement;
     private String name;
-    private int currencyCode;
+    private CurrencyCode currencyCode;
     private double interestRate;
     private int productLimit;
 
-    public ProductDto(List<Manager> managerId, Agreement agreement, String name, int currencyCode,
+    public ProductDto(List<Manager> managerId, Agreement agreement, String name, CurrencyCode currencyCode,
                       double interestRate, int productLimit) {
         this.managerId = managerId;
         this.agreement = agreement;
@@ -53,11 +54,11 @@ public class ProductDto {
         this.name = name;
     }
 
-    public int getCurrencyCode() {
+    public CurrencyCode getCurrencyCode() {
         return currencyCode;
     }
 
-    public void setCurrencyCode(int currencyCode) {
+    public void setCurrencyCode(CurrencyCode currencyCode) {
         this.currencyCode = currencyCode;
     }
 
