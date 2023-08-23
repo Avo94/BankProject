@@ -19,10 +19,10 @@ public class Account {
     private Client client;
     @OneToOne(mappedBy = "account")
     private Agreement agreement;
-    @OneToMany(mappedBy = "debitAccountId")
-    private List<Transaction> debitTransaction;
-    @OneToMany(mappedBy = "creditAccountId")
-    private List<Transaction> creditTransaction;
+    @OneToMany(mappedBy = "debitAccount")
+    private List<Transaction> debitTransactions;
+    @OneToMany(mappedBy = "creditAccount")
+    private List<Transaction> creditTransactions;
     private String name;
     @Enumerated(value = EnumType.STRING)
     private Type type;
@@ -34,14 +34,14 @@ public class Account {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    public Account(long id, Client client, Agreement agreement, List<Transaction> debitTransaction,
-                   List<Transaction> creditTransaction, String name, Type type, Status status,
+    public Account(long id, Client client, Agreement agreement, List<Transaction> debitTransactions,
+                   List<Transaction> creditTransactions, String name, Type type, Status status,
                    double balance, CurrencyCode currencyCode, Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
         this.client = client;
         this.agreement = agreement;
-        this.debitTransaction = debitTransaction;
-        this.creditTransaction = creditTransaction;
+        this.debitTransactions = debitTransactions;
+        this.creditTransactions = creditTransactions;
         this.name = name;
         this.type = type;
         this.status = status;
@@ -79,20 +79,20 @@ public class Account {
         this.agreement = agreement;
     }
 
-    public List<Transaction> getDebitTransaction() {
-        return debitTransaction;
+    public List<Transaction> getDebitTransactions() {
+        return debitTransactions;
     }
 
-    public void setDebitTransaction(List<Transaction> debitTransaction) {
-        this.debitTransaction = debitTransaction;
+    public void setDebitTransactions(List<Transaction> debitTransaction) {
+        this.debitTransactions = debitTransaction;
     }
 
-    public List<Transaction> getCreditTransaction() {
-        return creditTransaction;
+    public List<Transaction> getCreditTransactions() {
+        return creditTransactions;
     }
 
-    public void setCreditTransaction(List<Transaction> creditTransaction) {
-        this.creditTransaction = creditTransaction;
+    public void setCreditTransactions(List<Transaction> creditTransaction) {
+        this.creditTransactions = creditTransaction;
     }
 
     public String getName() {

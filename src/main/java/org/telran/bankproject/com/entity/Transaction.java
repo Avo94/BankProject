@@ -13,21 +13,21 @@ public class Transaction {
     private long id;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "debit_account_id", referencedColumnName = "id")
-    private Account debitAccountId;
+    private Account debitAccount;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "credit_account_id", referencedColumnName = "id")
-    private Account creditAccountId;
+    private Account creditAccount;
     @Enumerated(value = EnumType.STRING)
     private Type type;
     private double amount;
     private String description;
     private Timestamp createdAt;
 
-    public Transaction(long id, Account debitAccountId, Account creditAccountId, Type type,
+    public Transaction(long id, Account debitAccount, Account creditAccount, Type type,
                        double amount, String description, Timestamp createdAt) {
         this.id = id;
-        this.debitAccountId = debitAccountId;
-        this.creditAccountId = creditAccountId;
+        this.debitAccount = debitAccount;
+        this.creditAccount = creditAccount;
         this.type = type;
         this.amount = amount;
         this.description = description;
@@ -46,20 +46,20 @@ public class Transaction {
         this.id = id;
     }
 
-    public Account getDebitAccountId() {
-        return debitAccountId;
+    public Account getDebitAccount() {
+        return debitAccount;
     }
 
-    public void setDebitAccountId(Account debitAccountId) {
-        this.debitAccountId = debitAccountId;
+    public void setDebitAccount(Account debitAccountId) {
+        this.debitAccount = debitAccountId;
     }
 
-    public Account getCreditAccountId() {
-        return creditAccountId;
+    public Account getCreditAccount() {
+        return creditAccount;
     }
 
-    public void setCreditAccountId(Account creditAccountId) {
-        this.creditAccountId = creditAccountId;
+    public void setCreditAccount(Account creditAccountId) {
+        this.creditAccount = creditAccountId;
     }
 
     public Type getType() {

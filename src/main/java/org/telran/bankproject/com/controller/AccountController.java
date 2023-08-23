@@ -36,14 +36,19 @@ public class AccountController {
         return accountConverter.toDto(accountService.getById(id));
     }
 
-    @GetMapping("/transaction_history/{id}")
+    @GetMapping("/transactions/{id}")
     public List<TransactionDto> gatTransactionHistory(@PathVariable(name = "id") long id) {
         List<TransactionDto> allTransactions = new ArrayList<>();
-        accountService.getById(id).getDebitTransaction().stream().map(x -> allTransactions
-                .add(transactionConverter.toDto(x))).toList();
-        accountService.getById(id).getCreditTransaction().stream().map(x -> allTransactions
-                .add(transactionConverter.toDto(x))).toList();
+        accountService.getById(id).getDebitTransactions().stream().map(x -> transactionConverter.toDto(x))
+                .forEach(allTransactions::add);
+        accountService.getById(id).getCreditTransactions().stream().map(x -> transactionConverter.toDto(x))
+                .forEach(allTransactions::add);
         return allTransactions;
+    }
+
+    @GetMapping("/balance/{id}")
+    public double getBalance(@PathVariable(name = "id") long id) {
+        return accountService.getById(id).getBalance();
     }
 
     @PostMapping
@@ -51,8 +56,17 @@ public class AccountController {
         return accountService.add(accountConverter.toEntity(account));
     }
 
+    @PostMapping("/transfer/{id1}/{id2}/{amount}")
+    public TransactionDto transferMoney(@PathVariable(name = "id1") long DebitId,
+                                        @PathVariable(name = "id2") long CreditId,
+                                        @PathVariable(name = "amount") double amount) {
+
+        return transactionConverter.toDto(accountService.transferMoney(DebitId, CreditId, amount));
+    }
+
     @DeleteMapping("/{id}")
     public void remove(@PathVariable(name = "id") long id) {
         accountService.remove(id);
     }
+
 }

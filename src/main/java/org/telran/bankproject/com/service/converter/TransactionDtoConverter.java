@@ -10,14 +10,14 @@ public class TransactionDtoConverter implements DtoConverter<Transaction, Transa
 
     @Override
     public TransactionDto toDto(Transaction transaction) {
-        return new TransactionDto(transaction.getId(), new AccountDto(transaction.getDebitAccountId().getId(),
-                null, null, null, null, transaction.getDebitAccountId()
-                .getName(), transaction.getDebitAccountId().getType(), transaction.getDebitAccountId().getStatus(),
-                transaction.getDebitAccountId().getBalance(), transaction.getDebitAccountId().getCurrencyCode()),
-                new AccountDto(transaction.getCreditAccountId().getId(), null, null, null,
-                        null, transaction.getCreditAccountId().getName(), transaction
-                        .getCreditAccountId().getType(), transaction.getCreditAccountId().getStatus(), transaction
-                        .getCreditAccountId().getBalance(), transaction.getCreditAccountId().getCurrencyCode()),
+        return new TransactionDto(transaction.getId(), new AccountDto(transaction.getDebitAccount().getId(),
+                null, null, null, null, transaction.getDebitAccount()
+                .getName(), transaction.getDebitAccount().getType(), transaction.getDebitAccount().getStatus(),
+                transaction.getDebitAccount().getBalance(), transaction.getDebitAccount().getCurrencyCode()),
+                new AccountDto(transaction.getCreditAccount().getId(), null, null, null,
+                        null, transaction.getCreditAccount().getName(), transaction
+                        .getCreditAccount().getType(), transaction.getCreditAccount().getStatus(), transaction
+                        .getCreditAccount().getBalance(), transaction.getCreditAccount().getCurrencyCode()),
                 transaction.getType(), transaction.getAmount(), transaction.getDescription());
     }
 

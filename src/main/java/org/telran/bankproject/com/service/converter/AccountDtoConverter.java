@@ -21,9 +21,9 @@ public class AccountDtoConverter implements DtoConverter<Account, AccountDto> {
                 account.getClient().getFirstName(), account.getClient().getLastName(), account.getClient().getEmail(),
                 account.getClient().getAddress(), account.getClient().getPhone()), new AgreementDto(
                 account.getAgreement().getId(), null, null, account.getAgreement().getInterestRate(),
-                account.getAgreement().getStatus(), account.getAgreement().getSum()), account.getDebitTransaction()
+                account.getAgreement().getStatus(), account.getAgreement().getSum()), account.getDebitTransactions()
                 .stream().map(x -> new TransactionDto(x.getId(), null, null, x.getType(),
-                        x.getAmount(), x.getDescription())).toList(), account.getCreditTransaction().stream()
+                        x.getAmount(), x.getDescription())).toList(), account.getCreditTransactions().stream()
                 .map(x -> new TransactionDto(x.getId(), null, null, x.getType(),
                         x.getAmount(), x.getDescription())).toList(), account.getName(), account.getType(),
                 account.getStatus(), account.getBalance(), account.getCurrencyCode());
