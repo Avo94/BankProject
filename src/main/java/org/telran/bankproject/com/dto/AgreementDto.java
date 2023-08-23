@@ -1,66 +1,75 @@
 package org.telran.bankproject.com.dto;
 
-import org.telran.bankproject.com.entity.Account;
-import org.telran.bankproject.com.entity.Product;
-import org.telran.bankproject.com.enums.Type;
+import org.telran.bankproject.com.enums.Status;
 
 public class AgreementDto {
 
-    private Account accountId;
-    private Product productId;
-    private Type type;
-    private double amount;
-    private String description;
+    private long id;
+    private AccountDto account;
+    private ProductDto product;
+    private double interestRate;
+    private Status status;
+    private double sum;
 
-    public AgreementDto(Account accountId, Product productId, Type type, double amount, String description) {
-        this.accountId = accountId;
-        this.productId = productId;
-        this.type = type;
-        this.amount = amount;
-        this.description = description;
+    public AgreementDto(long id, AccountDto account, ProductDto product, double interestRate,
+                        Status status, double sum) {
+        this.id = id;
+        this.account = account;
+        this.product = product;
+        this.interestRate = interestRate;
+        this.status = status;
+        this.sum = sum;
     }
 
     public AgreementDto() {
         //
     }
 
-    public Account getAccountId() {
-        return accountId;
+    public long getId() {
+        return id;
     }
 
-    public void setAccountId(Account accountId) {
-        this.accountId = accountId;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public Product getProductId() {
-        return productId;
+    public AccountDto getAccount() {
+        return account;
     }
 
-    public void setProductId(Product productId) {
-        this.productId = productId;
+    public void setAccount(AccountDto account) {
+        this.account = account;
     }
 
-    public Type getType() {
-        return type;
+    public ProductDto getProduct() {
+        return product;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setProduct(ProductDto product) {
+        this.product = product;
     }
 
-    public double getAmount() {
-        return amount;
+    public double getInterestRate() {
+        return interestRate;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
+    public void setInterestRate(double interestRate) {
+        this.interestRate = interestRate;
     }
 
-    public String getDescription() {
-        return description;
+    public Status getStatus() {
+        return status;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public double getSum() {
+        return sum;
+    }
+
+    public void setSum(double sum) {
+        this.sum = sum;
     }
 }

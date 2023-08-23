@@ -1,6 +1,5 @@
 package org.telran.bankproject.com.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.telran.bankproject.com.enums.Status;
 
 import javax.persistence.*;
@@ -14,12 +13,10 @@ public class Agreement {
     private long id;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
-    @JsonManagedReference
-    private Account accountId;
+    private Account account;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
-    @JsonManagedReference
-    private Product productId;
+    private Product product;
     private double interestRate;
     @Enumerated(value = EnumType.STRING)
     private Status status;
@@ -27,11 +24,11 @@ public class Agreement {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    public Agreement(long id, Account accountId, Product productId, double interestRate, Status status,
+    public Agreement(long id, Account account, Product product, double interestRate, Status status,
                      double sum, Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
-        this.accountId = accountId;
-        this.productId = productId;
+        this.account = account;
+        this.product = product;
         this.interestRate = interestRate;
         this.status = status;
         this.sum = sum;
@@ -51,20 +48,20 @@ public class Agreement {
         this.id = id;
     }
 
-    public Account getAccountId() {
-        return accountId;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setAccountId(Account accountId) {
-        this.accountId = accountId;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
-    public Product getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(Product productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public double getInterestRate() {

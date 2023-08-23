@@ -1,7 +1,5 @@
 package org.telran.bankproject.com.dto;
 
-import org.telran.bankproject.com.entity.Account;
-import org.telran.bankproject.com.entity.Manager;
 import org.telran.bankproject.com.enums.Status;
 
 import java.util.List;
@@ -9,8 +7,8 @@ import java.util.List;
 public class ClientDto {
 
     private long id;
-    private Manager managerId;
-    private List<Account> accounts;
+    private ManagerDto manager;
+    private List<AccountDto> accounts;
     private Status status;
     private String taxCode;
     private String firstName;
@@ -19,10 +17,10 @@ public class ClientDto {
     private String address;
     private String phone;
 
-    public ClientDto(long id, Manager managerId, List<Account> accounts, Status status, String taxCode,
+    public ClientDto(long id, ManagerDto manager, List<AccountDto> accounts, Status status, String taxCode,
                      String firstName, String lastName, String email, String address, String phone) {
         this.id = id;
-        this.managerId = managerId;
+        this.manager = manager;
         this.accounts = accounts;
         this.status = status;
         this.taxCode = taxCode;
@@ -45,19 +43,19 @@ public class ClientDto {
         this.id = id;
     }
 
-    public Manager getManagerId() {
-        return managerId;
+    public ManagerDto getManager() {
+        return manager;
     }
 
-    public void setManagerId(Manager managerId) {
-        this.managerId = managerId;
+    public void setManager(ManagerDto manager) {
+        this.manager = manager;
     }
 
-    public List<Account> getAccounts() {
+    public List<AccountDto> getAccounts() {
         return accounts;
     }
 
-    public void setAccounts(List<Account> accounts) {
+    public void setAccounts(List<AccountDto> accounts) {
         this.accounts = accounts;
     }
 

@@ -1,6 +1,5 @@
 package org.telran.bankproject.com.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.telran.bankproject.com.enums.Type;
 
 import javax.persistence.*;
@@ -12,11 +11,9 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @JsonManagedReference
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "debit_account_id", referencedColumnName = "id")
     private Account debitAccountId;
-    @JsonManagedReference
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "credit_account_id", referencedColumnName = "id")
     private Account creditAccountId;

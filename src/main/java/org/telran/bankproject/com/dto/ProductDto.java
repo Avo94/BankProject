@@ -1,24 +1,21 @@
 package org.telran.bankproject.com.dto;
 
-import org.telran.bankproject.com.entity.Agreement;
-import org.telran.bankproject.com.entity.Manager;
 import org.telran.bankproject.com.enums.CurrencyCode;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProductDto {
 
-    private List<Manager> managerId = new ArrayList<>();
-    private Agreement agreement;
+    private long id;
+    private ManagerDto manager;
+    private AgreementDto agreement;
     private String name;
     private CurrencyCode currencyCode;
     private double interestRate;
     private int productLimit;
 
-    public ProductDto(List<Manager> managerId, Agreement agreement, String name, CurrencyCode currencyCode,
-                      double interestRate, int productLimit) {
-        this.managerId = managerId;
+    public ProductDto(long id, ManagerDto manager, AgreementDto agreement, String name,
+                      CurrencyCode currencyCode, double interestRate, int productLimit) {
+        this.id = id;
+        this.manager = manager;
         this.agreement = agreement;
         this.name = name;
         this.currencyCode = currencyCode;
@@ -30,19 +27,27 @@ public class ProductDto {
         //
     }
 
-    public List<Manager> getManagerId() {
-        return managerId;
+    public long getId() {
+        return id;
     }
 
-    public void setManagerId(List<Manager> managerId) {
-        this.managerId = managerId;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public Agreement getAgreement() {
+    public ManagerDto getManager() {
+        return manager;
+    }
+
+    public void setManager(ManagerDto manager) {
+        this.manager = manager;
+    }
+
+    public AgreementDto getAgreement() {
         return agreement;
     }
 
-    public void setAgreement(Agreement agreement) {
+    public void setAgreement(AgreementDto agreement) {
         this.agreement = agreement;
     }
 

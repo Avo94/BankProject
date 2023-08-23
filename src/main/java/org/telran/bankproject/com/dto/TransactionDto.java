@@ -1,29 +1,24 @@
 package org.telran.bankproject.com.dto;
 
-import org.telran.bankproject.com.entity.Account;
 import org.telran.bankproject.com.enums.Type;
-
-import java.sql.Timestamp;
 
 public class TransactionDto {
 
     private long id;
-    private Account debitAccountId;
-    private Account creditAccountId;
+    private AccountDto debitAccount;
+    private AccountDto creditAccount;
     private Type type;
     private double amount;
     private String description;
-    private Timestamp createdAt;
 
-    public TransactionDto(long id, Account debitAccountId, Account creditAccountId, Type type,
-                          double amount, String description, Timestamp createdAt) {
+    public TransactionDto(long id, AccountDto debitAccount, AccountDto creditAccount, Type type,
+                          double amount, String description) {
         this.id = id;
-        this.debitAccountId = debitAccountId;
-        this.creditAccountId = creditAccountId;
+        this.debitAccount = debitAccount;
+        this.creditAccount = creditAccount;
         this.type = type;
         this.amount = amount;
         this.description = description;
-        this.createdAt = createdAt;
     }
 
     public TransactionDto() {
@@ -34,27 +29,47 @@ public class TransactionDto {
         return id;
     }
 
-    public Account getDebitAccountId() {
-        return debitAccountId;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public Account getCreditAccountId() {
-        return creditAccountId;
+    public AccountDto getDebitAccount() {
+        return debitAccount;
+    }
+
+    public void setDebitAccount(AccountDto debitAccount) {
+        this.debitAccount = debitAccount;
+    }
+
+    public AccountDto getCreditAccount() {
+        return creditAccount;
+    }
+
+    public void setCreditAccount(AccountDto creditAccount) {
+        this.creditAccount = creditAccount;
     }
 
     public Type getType() {
         return type;
     }
 
+    public void setType(Type type) {
+        this.type = type;
+    }
+
     public double getAmount() {
         return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public Timestamp getCreatedAt() {
-        return createdAt;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

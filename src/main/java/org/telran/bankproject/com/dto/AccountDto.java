@@ -1,8 +1,5 @@
 package org.telran.bankproject.com.dto;
 
-import org.telran.bankproject.com.entity.Agreement;
-import org.telran.bankproject.com.entity.Client;
-import org.telran.bankproject.com.entity.Transaction;
 import org.telran.bankproject.com.enums.CurrencyCode;
 import org.telran.bankproject.com.enums.Status;
 import org.telran.bankproject.com.enums.Type;
@@ -12,24 +9,24 @@ import java.util.List;
 public class AccountDto {
 
     private long id;
-    private Client clientId;
-    private Agreement agreement;
-    private List<Transaction> debitTransaction;
-    private List<Transaction> creditTransaction;
+    private ClientDto client;
+    private AgreementDto agreement;
+    private List<TransactionDto> debitTransactions;
+    private List<TransactionDto> creditTransactions;
     private String name;
     private Type type;
     private Status status;
     private double balance;
     private CurrencyCode currencyCode;
 
-    public AccountDto(long id, Client clientId, Agreement agreement, List<Transaction> debitTransaction,
-                      List<Transaction> creditTransaction, String name, Type type, Status status,
+    public AccountDto(long id, ClientDto client, AgreementDto agreement, List<TransactionDto> debitTransactions,
+                      List<TransactionDto> creditTransactions, String name, Type type, Status status,
                       double balance, CurrencyCode currencyCode) {
         this.id = id;
-        this.clientId = clientId;
+        this.client = client;
         this.agreement = agreement;
-        this.debitTransaction = debitTransaction;
-        this.creditTransaction = creditTransaction;
+        this.debitTransactions = debitTransactions;
+        this.creditTransactions = creditTransactions;
         this.name = name;
         this.type = type;
         this.status = status;
@@ -49,36 +46,36 @@ public class AccountDto {
         this.id = id;
     }
 
-    public Client getClientId() {
-        return clientId;
+    public ClientDto getClient() {
+        return client;
     }
 
-    public void setClientId(Client clientId) {
-        this.clientId = clientId;
+    public void setClient(ClientDto client) {
+        this.client = client;
     }
 
-    public Agreement getAgreement() {
+    public AgreementDto getAgreement() {
         return agreement;
     }
 
-    public void setAgreement(Agreement agreement) {
+    public void setAgreement(AgreementDto agreement) {
         this.agreement = agreement;
     }
 
-    public List<Transaction> getDebitTransaction() {
-        return debitTransaction;
+    public List<TransactionDto> getDebitTransactions() {
+        return debitTransactions;
     }
 
-    public void setDebitTransaction(List<Transaction> debitTransaction) {
-        this.debitTransaction = debitTransaction;
+    public void setDebitTransactions(List<TransactionDto> debitTransactions) {
+        this.debitTransactions = debitTransactions;
     }
 
-    public List<Transaction> getCreditTransaction() {
-        return creditTransaction;
+    public List<TransactionDto> getCreditTransactions() {
+        return creditTransactions;
     }
 
-    public void setCreditTransaction(List<Transaction> creditTransaction) {
-        this.creditTransaction = creditTransaction;
+    public void setCreditTransactions(List<TransactionDto> creditTransactions) {
+        this.creditTransactions = creditTransactions;
     }
 
     public String getName() {

@@ -1,7 +1,5 @@
 package org.telran.bankproject.com.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.telran.bankproject.com.enums.CurrencyCode;
 import org.telran.bankproject.com.enums.Status;
 import org.telran.bankproject.com.enums.Type;
@@ -16,17 +14,13 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @JsonManagedReference
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id", referencedColumnName = "id")
-    private Client clientId;
-    @JsonBackReference
-    @OneToOne(mappedBy = "accountId")
+    private Client client;
+    @OneToOne(mappedBy = "account")
     private Agreement agreement;
-    @JsonBackReference
     @OneToMany(mappedBy = "debitAccountId")
     private List<Transaction> debitTransaction;
-    @JsonBackReference
     @OneToMany(mappedBy = "creditAccountId")
     private List<Transaction> creditTransaction;
     private String name;
@@ -40,11 +34,11 @@ public class Account {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    public Account(long id, Client clientId, Agreement agreement, List<Transaction> debitTransaction,
+    public Account(long id, Client client, Agreement agreement, List<Transaction> debitTransaction,
                    List<Transaction> creditTransaction, String name, Type type, Status status,
                    double balance, CurrencyCode currencyCode, Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
-        this.clientId = clientId;
+        this.client = client;
         this.agreement = agreement;
         this.debitTransaction = debitTransaction;
         this.creditTransaction = creditTransaction;
@@ -69,12 +63,12 @@ public class Account {
         this.id = id;
     }
 
-    public Client getClientId() {
-        return clientId;
+    public Client getClient() {
+        return client;
     }
 
-    public void setClientId(Client clientId) {
-        this.clientId = clientId;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public Agreement getAgreement() {

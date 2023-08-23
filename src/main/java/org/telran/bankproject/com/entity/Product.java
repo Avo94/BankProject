@@ -7,8 +7,6 @@ import org.telran.bankproject.com.enums.Status;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Product {
@@ -16,12 +14,10 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @JsonManagedReference
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
-    private List<Manager> managerId = new ArrayList<>();
-    @JsonBackReference
-    @OneToOne(mappedBy = "productId")
+    private Manager manager;
+    @OneToOne(mappedBy = "product")
     private Agreement agreement;
     private String name;
     @Enumerated(value = EnumType.STRING)
@@ -33,11 +29,11 @@ public class Product {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    public Product(long id, List<Manager> managerId, Agreement agreement, String name, Status status,
+    public Product(long id, Manager manager, Agreement agreement, String name, Status status,
                    CurrencyCode currencyCode, double interestRate, int productLimit,
                    Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
-        this.managerId = managerId;
+        this.manager = manager;
         this.agreement = agreement;
         this.name = name;
         this.status = status;
@@ -59,12 +55,12 @@ public class Product {
         this.id = id;
     }
 
-    public List<Manager> getManagerId() {
-        return managerId;
+    public Manager getManager() {
+        return manager;
     }
 
-    public void setManagerId(List<Manager> managerId) {
-        this.managerId = managerId;
+    public void setManager(Manager manager) {
+        this.manager = manager;
     }
 
     public Agreement getAgreement() {

@@ -28,7 +28,7 @@
             </column>
             <column name="manager_id" type="BIGINT">
                 <constraints foreignKeyName="client_manager_fkey" referencedTableName="manager"
-                             referencedColumnNames="id"/>
+                             referencedColumnNames="id" nullable="false"/>
             </column>
             <column name="status" type="VARCHAR(8)"/>
             <column name="tax_code" type="VARCHAR(20)"/>
@@ -50,7 +50,7 @@
             </column>
             <column name="client_id" type="BIGINT">
                 <constraints foreignKeyName="account_client_fkey" referencedTableName="client"
-                             referencedColumnNames="id"/>
+                             referencedColumnNames="id" nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(100)"/>
             <column name="type" type="VARCHAR(8)"/>
@@ -70,11 +70,11 @@
             </column>
             <column name="debit_account_id" type="BIGINT">
                 <constraints foreignKeyName="transaction_account_one_fkey" referencedTableName="account"
-                             referencedColumnNames="id"/>
+                             referencedColumnNames="id" nullable="false"/>
             </column>
             <column name="credit_account_id" type="BIGINT">
                 <constraints foreignKeyName="transaction_account_two_fkey" referencedTableName="account"
-                             referencedColumnNames="id"/>
+                             referencedColumnNames="id" nullable="false"/>
             </column>
             <column name="type" type="VARCHAR(8)"/>
             <column name="amount" type="DECIMAL(12,4)"/>
@@ -91,7 +91,7 @@
             </column>
             <column name="manager_id" type="BIGINT">
                 <constraints foreignKeyName="product_manager_fkey" referencedTableName="manager"
-                             referencedColumnNames="id"/>
+                             referencedColumnNames="id" nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(70)"/>
             <column name="status" type="VARCHAR(8)"/>
@@ -111,11 +111,11 @@
             </column>
             <column name="account_id" type="BIGINT">
                 <constraints foreignKeyName="agreement_account_fkey" referencedTableName="account"
-                             referencedColumnNames="id"/>
+                             referencedColumnNames="id" nullable="false"/>
             </column>
             <column name="product_id" type="BIGINT">
                 <constraints foreignKeyName="agreement_product_fkey" referencedTableName="product"
-                             referencedColumnNames="id"/>
+                             referencedColumnNames="id" nullable="false"/>
             </column>
             <column name="interest_rate" type="DECIMAL(6,4)"/>
             <column name="status" type="VARCHAR(8)"/>
@@ -123,57 +123,5 @@
             <column name="created_at" type="TIMESTAMP"/>
             <column name="updated_at" type="TIMESTAMP"/>
         </createTable>
-    </changeSet>
-
-    <changeSet id="202308211056215" author="Anton Vouk">
-        <comment>Add columns to manager table</comment>
-        <addColumn tableName="manager">
-            <column name="clients" type="BIGINT">
-                <constraints foreignKeyName="manager_client_fkey" referencedTableName="client"
-                             referencedColumnNames="id"/>
-            </column>
-            <column name="product" type="BIGINT">
-                <constraints foreignKeyName="manager_product_fkey" referencedTableName="product"
-                             referencedColumnNames="id"/>
-            </column>
-        </addColumn>
-    </changeSet>
-
-    <changeSet id="202308211057600" author="Anton Vouk">
-        <comment>Add columns to client table</comment>
-        <addColumn tableName="client">
-            <column name="accounts" type="BIGINT">
-                <constraints foreignKeyName="client_account_fkey" referencedTableName="account"
-                             referencedColumnNames="id"/>
-            </column>
-        </addColumn>
-    </changeSet>
-
-    <changeSet id="202308211201107" author="Anton Vouk">
-        <comment>Add columns to account table</comment>
-        <addColumn tableName="account">
-            <column name="agreement" type="BIGINT">
-                <constraints foreignKeyName="account_agreement_fkey" referencedTableName="agreement"
-                             referencedColumnNames="id"/>
-            </column>
-            <column name="debit_transaction" type="BIGINT">
-                <constraints foreignKeyName="account_transaction_debit_fkey" referencedTableName="transaction"
-                             referencedColumnNames="id"/>
-            </column>
-            <column name="credit_transaction" type="BIGINT">
-                <constraints foreignKeyName="account_transaction_credit_fkey" referencedTableName="transaction"
-                             referencedColumnNames="id"/>
-            </column>
-        </addColumn>
-    </changeSet>
-
-    <changeSet id="202308211202754" author="Anton Vouk">
-        <comment>Add columns to product table</comment>
-        <addColumn tableName="product">
-            <column name="agreement" type="BIGINT">
-                <constraints foreignKeyName="product_agreement_fkey" referencedTableName="agreement"
-                             referencedColumnNames="id"/>
-            </column>
-        </addColumn>
     </changeSet>
 </databaseChangeLog>

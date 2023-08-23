@@ -1,6 +1,5 @@
 package org.telran.bankproject.com.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.telran.bankproject.com.enums.Status;
 
 import javax.persistence.*;
@@ -14,12 +13,10 @@ public class Manager {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @JsonBackReference
-    @OneToMany(mappedBy = "managerId")
+    @OneToMany(mappedBy = "manager")
     private List<Client> clients = new ArrayList<>();
-    @JsonBackReference
-    @ManyToOne
-    private Product product;
+    @OneToMany(mappedBy = "manager")
+    private List<Product> products = new ArrayList<>();
     private String firstName;
     private String lastName;
     @Enumerated(value = EnumType.STRING)
@@ -27,11 +24,11 @@ public class Manager {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    public Manager(long id, List<Client> clients, Product product, String firstName, String lastName,
-                   Status status, Timestamp createdAt, Timestamp updatedAt) {
+    public Manager(long id, List<Client> clients, List<Product> products, String firstName,
+                   String lastName, Status status, Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
         this.clients = clients;
-        this.product = product;
+        this.products = products;
         this.firstName = firstName;
         this.lastName = lastName;
         this.status = status;
@@ -59,12 +56,12 @@ public class Manager {
         this.clients = clients;
     }
 
-    public Product getProduct() {
-        return product;
+    public List<Product> getProducts() {
+        return products;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     public String getFirstName() {

@@ -1,7 +1,5 @@
 package org.telran.bankproject.com.dto;
 
-import org.telran.bankproject.com.entity.Client;
-import org.telran.bankproject.com.entity.Product;
 import org.telran.bankproject.com.enums.Status;
 
 import java.util.ArrayList;
@@ -10,16 +8,17 @@ import java.util.List;
 public class ManagerDto {
 
     private long id;
-    private List<Client> clients = new ArrayList<>();
-    private Product product;
+    private List<ClientDto> clients = new ArrayList<>();
+    private List<ProductDto> products = new ArrayList<>();
     private String firstName;
     private String lastName;
     private Status status;
 
-    public ManagerDto(long id, List<Client> clients, Product product, String firstName, String lastName, Status status) {
+    public ManagerDto(long id, List<ClientDto> clients, List<ProductDto> products, String firstName,
+                      String lastName, Status status) {
         this.id = id;
         this.clients = clients;
-        this.product = product;
+        this.products = products;
         this.firstName = firstName;
         this.lastName = lastName;
         this.status = status;
@@ -37,20 +36,20 @@ public class ManagerDto {
         this.id = id;
     }
 
-    public List<Client> getClients() {
+    public List<ClientDto> getClients() {
         return clients;
     }
 
-    public void setClients(List<Client> clients) {
+    public void setClients(List<ClientDto> clients) {
         this.clients = clients;
     }
 
-    public Product getProduct() {
-        return product;
+    public List<ProductDto> getProducts() {
+        return products;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProducts(List<ProductDto> products) {
+        this.products = products;
     }
 
     public String getFirstName() {
