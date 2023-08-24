@@ -1,22 +1,27 @@
 package org.telran.bankproject.com.service.converter;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telran.bankproject.com.dto.AccountDto;
 import org.telran.bankproject.com.dto.ClientDto;
 import org.telran.bankproject.com.dto.ManagerDto;
 import org.telran.bankproject.com.entity.Client;
 import org.telran.bankproject.com.entity.Manager;
+import org.telran.bankproject.com.service.ManagerService;
 
 import java.sql.Timestamp;
 
 @Component
 public class ClientDtoConverter implements DtoConverter<Client, ClientDto> {
 
+    @Autowired
+    private ManagerService managerService;
+
     @Override
     public ClientDto toDto(Client client) {
-        return new ClientDto(client.getId(), new ManagerDto(client.getId(), null, null,
-                client.getFirstName(), client.getLastName(), client.getStatus()), client.getAccounts()
-                .stream().map(x -> new AccountDto(x.getId(), null, null,
+        return new ClientDto(client.getId(), new ManagerDto(client.getManager().getId(), null, null,
+                client.getManager().getFirstName(), client.getManager().getLastName(), client.getManager().getStatus()),
+                client.getAccounts().stream().map(x -> new AccountDto(x.getId(), null, null,
                         null, null, x.getName(), x.getType(), x.getStatus(),
                         x.getBalance(), x.getCurrencyCode())).toList(), client.getStatus(),
                 client.getTaxCode(), client.getFirstName(), client.getLastName(),
@@ -25,11 +30,11 @@ public class ClientDtoConverter implements DtoConverter<Client, ClientDto> {
 
     @Override
     public Client toEntity(ClientDto client) {
-        return new Client(client.getId(), new Manager(client.getManager().getId(), null, null,
-                client.getManager().getFirstName(), client.getManager().getLastName(), client.getManager()
-                .getStatus(), new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())),
-                null, client.getStatus(), client.getTaxCode(), client.getFirstName(),
-                client.getLastName(), client.getEmail(), client.getAddress(), client.getPhone(),
+        Manager manager = managerService.getAll().stream().filter(x -> x.getFirstName()
+                .equals(client.getManager().getFirstName()) && x.getLastName()
+                .equals(client.getManager().getLastName())).findFirst().orElse(null);
+        return new Client(client.getId(), manager, null, client.getStatus(), client.getTaxCode(),
+                client.getFirstName(), client.getLastName(), client.getEmail(), client.getAddress(), client.getPhone(),
                 new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
     }
 }

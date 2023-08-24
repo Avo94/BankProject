@@ -1,10 +1,12 @@
 package org.telran.bankproject.com.service.converter;
 
+import org.springframework.stereotype.Component;
 import org.telran.bankproject.com.dto.AccountDto;
 import org.telran.bankproject.com.dto.AgreementDto;
 import org.telran.bankproject.com.dto.ProductDto;
 import org.telran.bankproject.com.entity.Agreement;
 
+@Component
 public class AgreementDtoConverter implements DtoConverter<Agreement, AgreementDto> {
 
     @Override

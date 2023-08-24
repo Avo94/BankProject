@@ -8,7 +8,6 @@ import org.telran.bankproject.com.service.ManagerService;
 import org.telran.bankproject.com.service.converter.DtoConverter;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("managers")
@@ -22,7 +21,7 @@ public class ManagerController {
 
     @GetMapping
     public List<ManagerDto> getAll() {
-        return managerService.getAll().stream().map(manager -> managerConverter.toDto(manager)).collect(Collectors.toList());
+        return managerService.getAll().stream().map(manager -> managerConverter.toDto(manager)).toList();
     }
 
     @GetMapping("/{id}")
@@ -31,7 +30,7 @@ public class ManagerController {
     }
 
     @PostMapping
-    public Manager addClient(@RequestBody ManagerDto manager) {
+    public Manager addManager(@RequestBody ManagerDto manager) {
         return managerService.add(managerConverter.toEntity(manager));
     }
 

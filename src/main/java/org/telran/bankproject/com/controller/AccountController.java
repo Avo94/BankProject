@@ -52,7 +52,7 @@ public class AccountController {
     }
 
     @PostMapping
-    public Account addClient(@RequestBody AccountDto account) {
+    public Account addAccount(@RequestBody AccountDto account) {
         return accountService.add(accountConverter.toEntity(account));
     }
 

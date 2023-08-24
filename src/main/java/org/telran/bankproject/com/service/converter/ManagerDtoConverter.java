@@ -7,17 +7,12 @@ import org.telran.bankproject.com.dto.ProductDto;
 import org.telran.bankproject.com.entity.Manager;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class ManagerDtoConverter implements DtoConverter<Manager, ManagerDto> {
 
     @Override
     public ManagerDto toDto(Manager manager) {
-
-
         return new ManagerDto(manager.getId(),
                 manager.getClients().stream().map(x -> new ClientDto(x.getId(), null, null,
                         x.getStatus(), x.getTaxCode(), x.getFirstName(), x.getLastName(), x.getEmail(),
