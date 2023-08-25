@@ -7,11 +7,11 @@ import org.telran.bankproject.com.dto.AgreementDto;
 import org.telran.bankproject.com.dto.ClientDto;
 import org.telran.bankproject.com.dto.TransactionDto;
 import org.telran.bankproject.com.entity.Account;
-import org.telran.bankproject.com.entity.Agreement;
 import org.telran.bankproject.com.entity.Client;
 import org.telran.bankproject.com.service.ClientService;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Component
 public class AccountDtoConverter implements DtoConverter<Account, AccountDto> {
@@ -21,17 +21,29 @@ public class AccountDtoConverter implements DtoConverter<Account, AccountDto> {
 
     @Override
     public AccountDto toDto(Account account) {
+        List<TransactionDto> debitTransactions;
+        List<TransactionDto> creditTransactions;
+        if (account.getDebitTransactions() == null) {
+            debitTransactions = null;
+        } else {
+            debitTransactions = account.getDebitTransactions().stream().map(x -> new TransactionDto(x.getId(),
+                    null, null, x.getType(), x.getAmount(), x.getDescription())).toList();
+        }
+        if (account.getCreditTransactions() == null) {
+            creditTransactions = null;
+        } else {
+            creditTransactions = account.getCreditTransactions().stream().map(x -> new TransactionDto(x.getId(),
+                    null, null, x.getType(), x.getAmount(), x.getDescription())).toList();
+        }
+
         return new AccountDto(account.getId(), new ClientDto(account.getClient().getId(), null,
                 null, account.getClient().getStatus(), account.getClient().getTaxCode(),
                 account.getClient().getFirstName(), account.getClient().getLastName(), account.getClient().getEmail(),
                 account.getClient().getAddress(), account.getClient().getPhone()), new AgreementDto(
                 account.getAgreement().getId(), null, null, account.getAgreement().getInterestRate(),
-                account.getAgreement().getStatus(), account.getAgreement().getSum()), account.getDebitTransactions()
-                .stream().map(x -> new TransactionDto(x.getId(), null, null, x.getType(),
-                        x.getAmount(), x.getDescription())).toList(), account.getCreditTransactions().stream()
-                .map(x -> new TransactionDto(x.getId(), null, null, x.getType(),
-                        x.getAmount(), x.getDescription())).toList(), account.getName(), account.getType(),
-                account.getStatus(), account.getBalance(), account.getCurrencyCode());
+                account.getAgreement().getStatus(), account.getAgreement().getSum()), debitTransactions,
+                creditTransactions, account.getName(), account.getType(), account.getStatus(), account.getBalance(),
+                account.getCurrencyCode());
     }
 
     @Override

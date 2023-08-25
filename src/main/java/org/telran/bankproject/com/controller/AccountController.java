@@ -52,8 +52,8 @@ public class AccountController {
     }
 
     @PostMapping
-    public Account addAccount(@RequestBody AccountDto account) {
-        return accountService.add(accountConverter.toEntity(account));
+    public AccountDto addAccount(@RequestBody AccountDto account) {
+        return accountConverter.toDto(accountService.add(accountConverter.toEntity(account)));
     }
 
     @PostMapping("/transfer/{id1}/{id2}/{amount}")

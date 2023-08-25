@@ -30,8 +30,8 @@ public class ManagerController {
     }
 
     @PostMapping
-    public Manager addManager(@RequestBody ManagerDto manager) {
-        return managerService.add(managerConverter.toEntity(manager));
+    public ManagerDto addManager(@RequestBody ManagerDto manager) {
+        return managerConverter.toDto(managerService.add(managerConverter.toEntity(manager)));
     }
 
     @DeleteMapping("/{id}")

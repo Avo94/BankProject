@@ -3,9 +3,9 @@ package org.telran.bankproject.com.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telran.bankproject.com.entity.Account;
+import org.telran.bankproject.com.entity.Agreement;
 import org.telran.bankproject.com.entity.Product;
 import org.telran.bankproject.com.entity.Transaction;
-import org.telran.bankproject.com.enums.CurrencyCode;
 import org.telran.bankproject.com.enums.Status;
 import org.telran.bankproject.com.repository.AccountRepository;
 
@@ -25,6 +25,9 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private AgreementService agreementService;
+
     @Override
     public List<Account> getAll() {
         return accountRepository.findAll();
@@ -37,14 +40,29 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account add(Account account) {
-        Long lastProductId = productService.getAll().stream().map(Product::getId)
-                .max(Comparator.naturalOrder()).orElse(null);
-        Product product = productService.add(new Product(lastProductId + 1, account.getClient().getManager(), null,
-                "Basic agreement", Status.ACTIVE, CurrencyCode.USD, 8, 500000,
-                new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
-        account.setAgreement(product.getAgreement());
-        product.getAgreement().setAccount(account);
-        product.getAgreement().setSum(account.getBalance());
+        Account entity = accountRepository.save(account);
+        Long lastProductId;
+        Long lastAgreementId;
+        if (productService.getAll() == null) {
+            lastProductId = 1L;
+        } else {
+            lastProductId = productService.getAll().stream().map(Product::getId)
+                    .max(Comparator.naturalOrder()).orElse(null);
+        }
+        if (agreementService.getAll() == null) {
+            lastAgreementId = 1L;
+        } else {
+            lastAgreementId = agreementService.getAll().stream().map(Agreement::getId)
+                    .max(Comparator.naturalOrder()).orElse(null);
+        }
+        Product product = productService.add(new Product(lastProductId + 1, account.getClient().getManager(),
+                null, account.getType() + " account", Status.ACTIVE, account.getCurrencyCode(),
+                account.getType().getRate(), account.getType().getLimit(), new Timestamp(System.currentTimeMillis()),
+                new Timestamp(System.currentTimeMillis())));
+        Agreement agreement = agreementService.add(new Agreement(lastAgreementId + 1, entity, product, account
+                .getType().getRate(), Status.ACTIVE, account.getBalance(), new Timestamp(System.currentTimeMillis()),
+                new Timestamp(System.currentTimeMillis())));
+        account.setAgreement(agreement);
         return accountRepository.save(account);
     }
 

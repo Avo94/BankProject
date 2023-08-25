@@ -31,8 +31,8 @@ public class ClientController {
     }
 
     @PostMapping
-    public Client addClient(@RequestBody ClientDto client) {
-        return clientService.add(clientConverter.toEntity(client));
+    public ClientDto addClient(@RequestBody ClientDto client) {
+        return clientConverter.toDto(clientService.add(clientConverter.toEntity(client)));
     }
 
     @DeleteMapping("/{id}")

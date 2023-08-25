@@ -25,6 +25,7 @@ public class AgreementServiceImpl implements AgreementService {
 
     @Override
     public Agreement add(Agreement agreement) {
+        agreement.getProduct().setAgreement(agreement);
         return agreementRepository.save(agreement);
     }
 

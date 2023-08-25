@@ -29,13 +29,21 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Transaction add(Transaction transaction) {
+        transaction.getDebitAccount().setDebitTransactions(List.of(transaction));
+        transaction.getCreditAccount().setCreditTransactions(List.of(transaction));
         return transactionRepository.save(transaction);
     }
 
     @Override
     public Transaction create(Account senderAccount, Account recipientAccount, double amount, String description) {
-        Long lastId = transactionRepository.findAll().stream().map(Transaction::getId).max(Comparator.naturalOrder()).get();
-        return transactionRepository.save(new Transaction(lastId + 1, senderAccount, recipientAccount, Type.STANDARD,
+        Long lastId;
+        if (transactionRepository.findAll() == null) {
+            lastId = null;
+        } else {
+            lastId = transactionRepository.findAll().stream().map(Transaction::getId)
+                    .max(Comparator.naturalOrder()).get();
+        }
+        return transactionRepository.save(new Transaction(lastId + 1, senderAccount, recipientAccount, Type.SUCCESSFUL,
                 amount, description, new Timestamp(System.currentTimeMillis())));
     }
 

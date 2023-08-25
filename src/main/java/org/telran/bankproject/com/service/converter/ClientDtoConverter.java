@@ -10,6 +10,7 @@ import org.telran.bankproject.com.entity.Manager;
 import org.telran.bankproject.com.service.ManagerService;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Component
 public class ClientDtoConverter implements DtoConverter<Client, ClientDto> {
@@ -19,12 +20,17 @@ public class ClientDtoConverter implements DtoConverter<Client, ClientDto> {
 
     @Override
     public ClientDto toDto(Client client) {
+        List<AccountDto> accounts;
+        if (client.getAccounts() == null) {
+            accounts = null;
+        } else {
+            accounts = client.getAccounts().stream().map(x -> new AccountDto(x.getId(), null, null,
+                    null, null, x.getName(), x.getType(), x.getStatus(),
+                    x.getBalance(), x.getCurrencyCode())).toList();
+        }
         return new ClientDto(client.getId(), new ManagerDto(client.getManager().getId(), null, null,
                 client.getManager().getFirstName(), client.getManager().getLastName(), client.getManager().getStatus()),
-                client.getAccounts().stream().map(x -> new AccountDto(x.getId(), null, null,
-                        null, null, x.getName(), x.getType(), x.getStatus(),
-                        x.getBalance(), x.getCurrencyCode())).toList(), client.getStatus(),
-                client.getTaxCode(), client.getFirstName(), client.getLastName(),
+                accounts, client.getStatus(), client.getTaxCode(), client.getFirstName(), client.getLastName(),
                 client.getEmail(), client.getAddress(), client.getPhone());
     }
 
