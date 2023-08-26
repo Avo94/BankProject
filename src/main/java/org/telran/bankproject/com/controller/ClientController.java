@@ -35,8 +35,8 @@ public class ClientController {
         return clientConverter.toDto(clientService.add(clientConverter.toEntity(client)));
     }
 
-    @DeleteMapping("/{id}")
-    public void remove(@PathVariable(name = "id") long id) {
-        clientService.remove(id);
+    @DeleteMapping
+    public void remove(@RequestBody ClientDto client) {
+        clientService.remove(clientService.getById(client.getId()));
     }
 }

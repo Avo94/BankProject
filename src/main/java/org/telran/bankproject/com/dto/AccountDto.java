@@ -14,13 +14,14 @@ public class AccountDto {
     private List<TransactionDto> debitTransactions;
     private List<TransactionDto> creditTransactions;
     private String name;
+    private String iban;
     private Type type;
     private Status status;
     private double balance;
     private CurrencyCode currencyCode;
 
     public AccountDto(long id, ClientDto client, AgreementDto agreement, List<TransactionDto> debitTransactions,
-                      List<TransactionDto> creditTransactions, String name, Type type, Status status,
+                      List<TransactionDto> creditTransactions, String name, String iban, Type type, Status status,
                       double balance, CurrencyCode currencyCode) {
         this.id = id;
         this.client = client;
@@ -28,6 +29,7 @@ public class AccountDto {
         this.debitTransactions = debitTransactions;
         this.creditTransactions = creditTransactions;
         this.name = name;
+        this.iban = iban;
         this.type = type;
         this.status = status;
         this.balance = balance;
@@ -84,6 +86,14 @@ public class AccountDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getIban() {
+        return iban;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
     }
 
     public Type getType() {

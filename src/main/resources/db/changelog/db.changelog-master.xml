@@ -53,6 +53,7 @@
                              referencedColumnNames="id" nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(100)"/>
+            <column name="iban" type="VARCHAR(16)"/>
             <column name="type" type="VARCHAR(8)"/>
             <column name="status" type="VARCHAR(8)"/>
             <column name="balance" type="DECIMAL(15,2)"/>

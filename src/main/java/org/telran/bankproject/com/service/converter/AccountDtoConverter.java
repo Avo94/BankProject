@@ -9,6 +9,7 @@ import org.telran.bankproject.com.dto.TransactionDto;
 import org.telran.bankproject.com.entity.Account;
 import org.telran.bankproject.com.entity.Client;
 import org.telran.bankproject.com.service.ClientService;
+import org.telran.bankproject.com.service.generator.IbanGenerator;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -18,6 +19,9 @@ public class AccountDtoConverter implements DtoConverter<Account, AccountDto> {
 
     @Autowired
     private ClientService clientService;
+
+    @Autowired
+    private IbanGenerator generator;
 
     @Override
     public AccountDto toDto(Account account) {
@@ -39,11 +43,11 @@ public class AccountDtoConverter implements DtoConverter<Account, AccountDto> {
         return new AccountDto(account.getId(), new ClientDto(account.getClient().getId(), null,
                 null, account.getClient().getStatus(), account.getClient().getTaxCode(),
                 account.getClient().getFirstName(), account.getClient().getLastName(), account.getClient().getEmail(),
-                account.getClient().getAddress(), account.getClient().getPhone()), new AgreementDto(
+                account.getClient().getAddress(), account.getClient().getPhone()), null /*new AgreementDto(
                 account.getAgreement().getId(), null, null, account.getAgreement().getInterestRate(),
-                account.getAgreement().getStatus(), account.getAgreement().getSum()), debitTransactions,
-                creditTransactions, account.getName(), account.getType(), account.getStatus(), account.getBalance(),
-                account.getCurrencyCode());
+                account.getAgreement().getStatus(), account.getAgreement().getSum())*/, debitTransactions,
+                creditTransactions, account.getName(), account.getIban(), account.getType(), account.getStatus(),
+                account.getBalance(), account.getCurrencyCode());
     }
 
     @Override
@@ -52,7 +56,7 @@ public class AccountDtoConverter implements DtoConverter<Account, AccountDto> {
                 .getFirstName()) && x.getTaxCode().equals(account.getClient().getTaxCode())
                 && x.getEmail().equals(account.getClient().getEmail())).findFirst().orElse(null);
         return new Account(account.getId(), client, null, null, null,
-                account.getName(), account.getType(), account.getStatus(), account.getBalance(), account.getCurrencyCode(),
+                account.getName(), generator.generate(), account.getType(), account.getStatus(), account.getBalance(), account.getCurrencyCode(),
                 new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
     }
 }

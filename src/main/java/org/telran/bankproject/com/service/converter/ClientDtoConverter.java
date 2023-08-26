@@ -25,7 +25,7 @@ public class ClientDtoConverter implements DtoConverter<Client, ClientDto> {
             accounts = null;
         } else {
             accounts = client.getAccounts().stream().map(x -> new AccountDto(x.getId(), null, null,
-                    null, null, x.getName(), x.getType(), x.getStatus(),
+                    null, null, x.getName(), x.getIban(), x.getType(), x.getStatus(),
                     x.getBalance(), x.getCurrencyCode())).toList();
         }
         return new ClientDto(client.getId(), new ManagerDto(client.getManager().getId(), null, null,

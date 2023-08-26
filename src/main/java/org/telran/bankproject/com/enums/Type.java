@@ -8,10 +8,10 @@ public enum Type {
     FAILED;
 
     public double getRate() {
-        return ((ordinal() * 5) + 3.0);
+        return ((ordinal() + 1) * 8);
     }
 
     public int getLimit() {
-        return (ordinal() * 1000000);
+        return ((ordinal() + 1) * 500000);
     }
 }

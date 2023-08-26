@@ -24,8 +24,8 @@ public class Agreement {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    public Agreement(long id, Account account, Product product, double interestRate, Status status,
-                     double sum, Timestamp createdAt, Timestamp updatedAt) {
+    public Agreement(long id, Account account, Product product, double interestRate,
+                     Status status, double sum, Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
         this.account = account;
         this.product = product;

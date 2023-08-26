@@ -20,12 +20,13 @@ public class TransactionDtoConverter implements DtoConverter<Transaction, Transa
     public TransactionDto toDto(Transaction transaction) {
         return new TransactionDto(transaction.getId(), new AccountDto(transaction.getDebitAccount().getId(),
                 null, null, null, null, transaction.getDebitAccount()
-                .getName(), transaction.getDebitAccount().getType(), transaction.getDebitAccount().getStatus(),
-                transaction.getDebitAccount().getBalance(), transaction.getDebitAccount().getCurrencyCode()),
-                new AccountDto(transaction.getCreditAccount().getId(), null, null, null,
-                        null, transaction.getCreditAccount().getName(), transaction
-                        .getCreditAccount().getType(), transaction.getCreditAccount().getStatus(), transaction
-                        .getCreditAccount().getBalance(), transaction.getCreditAccount().getCurrencyCode()),
+                .getName(), transaction.getDebitAccount().getIban(), transaction.getDebitAccount().getType(),
+                transaction.getDebitAccount().getStatus(), transaction.getDebitAccount().getBalance(),
+                transaction.getDebitAccount().getCurrencyCode()), new AccountDto(transaction.getCreditAccount().getId(),
+                null, null, null, null,
+                transaction.getCreditAccount().getName(), transaction.getCreditAccount().getIban(),
+                transaction.getCreditAccount().getType(), transaction.getCreditAccount().getStatus(),
+                transaction.getCreditAccount().getBalance(), transaction.getCreditAccount().getCurrencyCode()),
                 transaction.getType(), transaction.getAmount(), transaction.getDescription());
     }
 

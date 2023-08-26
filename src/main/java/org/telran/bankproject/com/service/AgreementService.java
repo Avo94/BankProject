@@ -12,5 +12,5 @@ public interface AgreementService {
 
     Agreement add(Agreement agreement);
 
-    void remove(long id);
+    void remove(Agreement agreement);
 }

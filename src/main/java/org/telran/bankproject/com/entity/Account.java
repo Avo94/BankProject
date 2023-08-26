@@ -24,6 +24,7 @@ public class Account {
     @OneToMany(mappedBy = "creditAccount")
     private List<Transaction> creditTransactions;
     private String name;
+    private String iban;
     @Enumerated(value = EnumType.STRING)
     private Type type;
     @Enumerated(value = EnumType.STRING)
@@ -35,7 +36,7 @@ public class Account {
     private Timestamp updatedAt;
 
     public Account(long id, Client client, Agreement agreement, List<Transaction> debitTransactions,
-                   List<Transaction> creditTransactions, String name, Type type, Status status,
+                   List<Transaction> creditTransactions, String name, String iban, Type type, Status status,
                    double balance, CurrencyCode currencyCode, Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
         this.client = client;
@@ -43,6 +44,7 @@ public class Account {
         this.debitTransactions = debitTransactions;
         this.creditTransactions = creditTransactions;
         this.name = name;
+        this.iban = iban;
         this.type = type;
         this.status = status;
         this.balance = balance;
@@ -83,16 +85,16 @@ public class Account {
         return debitTransactions;
     }
 
-    public void setDebitTransactions(List<Transaction> debitTransaction) {
-        this.debitTransactions = debitTransaction;
+    public void setDebitTransactions(List<Transaction> debitTransactions) {
+        this.debitTransactions = debitTransactions;
     }
 
     public List<Transaction> getCreditTransactions() {
         return creditTransactions;
     }
 
-    public void setCreditTransactions(List<Transaction> creditTransaction) {
-        this.creditTransactions = creditTransaction;
+    public void setCreditTransactions(List<Transaction> creditTransactions) {
+        this.creditTransactions = creditTransactions;
     }
 
     public String getName() {
@@ -101,6 +103,14 @@ public class Account {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getIban() {
+        return iban;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
     }
 
     public Type getType() {

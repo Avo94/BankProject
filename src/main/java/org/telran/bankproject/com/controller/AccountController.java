@@ -46,9 +46,9 @@ public class AccountController {
         return allTransactions;
     }
 
-    @GetMapping("/balance/{id}")
-    public double getBalance(@PathVariable(name = "id") long id) {
-        return accountService.getById(id).getBalance();
+    @GetMapping("/balance/{iban}")
+    public double getBalance(@PathVariable String iban) {
+        return accountService.getBalance(iban);
     }
 
     @PostMapping
@@ -56,17 +56,20 @@ public class AccountController {
         return accountConverter.toDto(accountService.add(accountConverter.toEntity(account)));
     }
 
-    @PostMapping("/transfer/{id1}/{id2}/{amount}")
-    public TransactionDto transferMoney(@PathVariable(name = "id1") long DebitId,
-                                        @PathVariable(name = "id2") long CreditId,
-                                        @PathVariable(name = "amount") double amount) {
-
-        return transactionConverter.toDto(accountService.transferMoney(DebitId, CreditId, amount));
+    @PostMapping("topup/{iban}/{amount}")
+    public double topUpAccount(@PathVariable String iban, @PathVariable double amount) {
+        return accountService.topUp(iban, amount);
     }
 
-    @DeleteMapping("/{id}")
-    public void remove(@PathVariable(name = "id") long id) {
-        accountService.remove(id);
+    @PostMapping("/transfer/{iban1}/{iban2}/{amount}")
+    public TransactionDto transferMoney(@PathVariable(name = "iban1") String debitAccount,
+                                        @PathVariable(name = "iban2") String creditAccount,
+                                        @PathVariable double amount) {
+        return transactionConverter.toDto(accountService.transferMoney(debitAccount, creditAccount, amount));
     }
 
+    @DeleteMapping
+    public void remove(@RequestBody AccountDto account) {
+        accountService.remove(accountService.getById(account.getId()));
+    }
 }

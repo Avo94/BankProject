@@ -3,8 +3,10 @@ package org.telran.bankproject.com.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telran.bankproject.com.entity.Client;
+import org.telran.bankproject.com.repository.AccountRepository;
 import org.telran.bankproject.com.repository.ClientRepository;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -12,6 +14,8 @@ public class ClientServiceImpl implements ClientService {
 
     @Autowired
     private ClientRepository clientRepository;
+    @Autowired
+    private AccountService accountService;
 
     @Override
     public List<Client> getAll() {
@@ -30,7 +34,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void remove(long id) {
-        clientRepository.deleteById(id);
+    public void remove(Client client) {
+        client.getAccounts().forEach(x -> accountService.remove(x));
+        clientRepository.deleteAllByIdInBatch(Collections.singleton(client.getId()));
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.telran.bankproject.com.entity.Agreement;
 import org.telran.bankproject.com.repository.AgreementRepository;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -25,12 +26,14 @@ public class AgreementServiceImpl implements AgreementService {
 
     @Override
     public Agreement add(Agreement agreement) {
-        agreement.getProduct().setAgreement(agreement);
-        return agreementRepository.save(agreement);
+        Agreement entity = agreementRepository.save(agreement);
+        entity.getProduct().setAgreement(agreement);
+        entity.getAccount().setAgreement(agreement);
+        return entity;
     }
 
     @Override
-    public void remove(long id) {
-        agreementRepository.deleteById(id);
+    public void remove(Agreement agreement) {
+        agreementRepository.deleteAllByIdInBatch(Collections.singleton(agreement.getId()));
     }
 }

@@ -11,9 +11,15 @@ public interface AccountService {
 
     Account getById(long id);
 
+    double getBalance(String iban);
+
     Account add(Account account);
 
-    Transaction transferMoney(long id1, long id2, double amount);
+    double topUp(String iban, double amount);
 
-    void remove(long id);
+    Account update(Account account);
+
+    Transaction transferMoney(String iban1, String iban2, double amount);
+
+    void remove(Account account);
 }
