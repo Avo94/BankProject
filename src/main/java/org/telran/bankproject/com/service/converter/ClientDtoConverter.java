@@ -36,6 +36,11 @@ public class ClientDtoConverter implements DtoConverter<Client, ClientDto> {
 
     @Override
     public Client toEntity(ClientDto client) {
+        if (client.getId() > 0) {
+            return new Client(client.getId(), null, null, client.getStatus(), client.getTaxCode(),
+                    null, null, client.getEmail(), client.getAddress(), client.getPhone(),
+                    null, null);
+        }
         Manager manager = managerService.getAll().stream().filter(x -> x.getFirstName()
                 .equals(client.getManager().getFirstName()) && x.getLastName()
                 .equals(client.getManager().getLastName())).findFirst().orElse(null);

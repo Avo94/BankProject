@@ -61,6 +61,11 @@ public class AccountController {
         return accountService.topUp(iban, amount);
     }
 
+    @PostMapping("/update")
+    public AccountDto nameTypeStatusCurrencyCodUpdate(@RequestBody AccountDto account) {
+        return accountConverter.toDto(accountService.update(accountConverter.toEntity(account)));
+    }
+
     @PostMapping("/transfer/{iban1}/{iban2}/{amount}")
     public TransactionDto transferMoney(@PathVariable(name = "iban1") String debitAccount,
                                         @PathVariable(name = "iban2") String creditAccount,

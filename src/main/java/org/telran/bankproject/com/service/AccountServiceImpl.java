@@ -75,7 +75,17 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account update(Account account) {
-        return accountRepository.save(account);
+        Account entity = accountRepository.findAll().stream().filter(x -> x.getIban()
+                .equals(account.getIban())).findFirst().get();
+        if (account.getName() != null) entity.setName(account.getName());
+        if (account.getType() != null) entity.setType(account.getType());
+        if (account.getStatus() != null) entity.setStatus(account.getStatus());
+        if (account.getCurrencyCode() != null) {
+            entity.setCurrencyCode(account.getCurrencyCode());
+            entity.setBalance(converter.convert(entity, account, entity.getBalance()));
+        }
+        entity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        return accountRepository.save(entity);
     }
 
     @Override

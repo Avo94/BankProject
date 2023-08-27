@@ -52,6 +52,11 @@ public class AccountDtoConverter implements DtoConverter<Account, AccountDto> {
 
     @Override
     public Account toEntity(AccountDto account) {
+        if (account.getIban() != null) {
+            return new Account(account.getId(), null, null, null, null,
+                    account.getName(), account.getIban(), account.getType(), account.getStatus(), account.getBalance(),
+                    account.getCurrencyCode(), null, null);
+        }
         Client client = clientService.getAll().stream().filter(x -> x.getFirstName().equals(account.getClient()
                 .getFirstName()) && x.getTaxCode().equals(account.getClient().getTaxCode())
                 && x.getEmail().equals(account.getClient().getEmail())).findFirst().orElse(null);

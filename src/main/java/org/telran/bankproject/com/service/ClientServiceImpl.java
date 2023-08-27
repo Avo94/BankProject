@@ -3,9 +3,9 @@ package org.telran.bankproject.com.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telran.bankproject.com.entity.Client;
-import org.telran.bankproject.com.repository.AccountRepository;
 import org.telran.bankproject.com.repository.ClientRepository;
 
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,6 +31,18 @@ public class ClientServiceImpl implements ClientService {
     public Client add(Client client) {
         client.getManager().setClients(List.of(client));
         return clientRepository.save(client);
+    }
+
+    @Override
+    public Client update(Client client) {
+        Client entity = clientRepository.getReferenceById(client.getId());
+        if (client.getStatus() != null) entity.setStatus(client.getStatus());
+        if (client.getTaxCode() != null) entity.setTaxCode(client.getTaxCode());
+        if (client.getEmail() != null) entity.setEmail(client.getEmail());
+        if (client.getAddress() != null) entity.setAddress(client.getAddress());
+        if (client.getPhone() != null) entity.setPhone(client.getPhone());
+        entity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        return clientRepository.save(entity);
     }
 
     @Override

@@ -35,6 +35,11 @@ public class ClientController {
         return clientConverter.toDto(clientService.add(clientConverter.toEntity(client)));
     }
 
+    @PostMapping("/update")
+    public ClientDto statusTaxCodeEmailAddressPhoneUpdate(@RequestBody ClientDto client) {
+        return clientConverter.toDto(clientService.update(clientConverter.toEntity(client)));
+    }
+
     @DeleteMapping
     public void remove(@RequestBody ClientDto client) {
         clientService.remove(clientService.getById(client.getId()));
