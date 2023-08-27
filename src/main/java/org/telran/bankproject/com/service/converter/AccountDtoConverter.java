@@ -8,9 +8,11 @@ import org.telran.bankproject.com.dto.ClientDto;
 import org.telran.bankproject.com.dto.TransactionDto;
 import org.telran.bankproject.com.entity.Account;
 import org.telran.bankproject.com.entity.Client;
+import org.telran.bankproject.com.entity.Manager;
 import org.telran.bankproject.com.service.ClientService;
 import org.telran.bankproject.com.service.generator.IbanGenerator;
 
+import javax.persistence.EntityNotFoundException;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -57,9 +59,11 @@ public class AccountDtoConverter implements DtoConverter<Account, AccountDto> {
                     account.getName(), account.getIban(), account.getType(), account.getStatus(), account.getBalance(),
                     account.getCurrencyCode(), null, null);
         }
+        if (account.getClient() == null) throw new EntityNotFoundException("The \"client\" field cannot be empty");
         Client client = clientService.getAll().stream().filter(x -> x.getFirstName().equals(account.getClient()
                 .getFirstName()) && x.getTaxCode().equals(account.getClient().getTaxCode())
                 && x.getEmail().equals(account.getClient().getEmail())).findFirst().orElse(null);
+        if (client == null) throw new EntityNotFoundException("Such manager was not found in the database");
         return new Account(account.getId(), client, null, null, null,
                 account.getName(), generator.generate(), account.getType(), account.getStatus(), account.getBalance(), account.getCurrencyCode(),
                 new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));

@@ -5,10 +5,13 @@ import org.springframework.stereotype.Service;
 import org.telran.bankproject.com.entity.*;
 import org.telran.bankproject.com.enums.Status;
 import org.telran.bankproject.com.enums.Type;
+import org.telran.bankproject.com.exceptions.NotEnoughMoneyException;
 import org.telran.bankproject.com.repository.AccountRepository;
 import org.telran.bankproject.com.service.converter.currency.CurrencyConverter;
 
+import javax.persistence.EntityNotFoundException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -37,11 +40,27 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account getById(long id) {
+        Account account = accountRepository.findById(id).orElse(null);
+        if (account == null) throw new EntityNotFoundException(String.format("Client with id %d not found", id));
         return accountRepository.getReferenceById(id);
     }
 
     @Override
+    public List<Transaction> gatTransactions(String iban) {
+        Account account = accountRepository.findAll().stream().filter(x -> x.getIban().equals(iban))
+                .findFirst().orElse(null);
+        if (account == null) throw new EntityNotFoundException(String.format("Account with iban %s not found", iban));
+        List<Transaction> allTransactions = new ArrayList<>();
+        allTransactions.addAll(accountRepository.getReferenceById(account.getId()).getDebitTransactions());
+        allTransactions.addAll(accountRepository.getReferenceById(account.getId()).getCreditTransactions());
+        return allTransactions;
+    }
+
+    @Override
     public double getBalance(String iban) {
+        Account account = accountRepository.findAll().stream().filter(x -> x.getIban().equals(iban))
+                .findFirst().orElse(null);
+        if (account == null) throw new EntityNotFoundException(String.format("Account with iban %s not found", iban));
         return accountRepository.findAll().stream()
                 .filter(x -> x.getIban().equals(iban)).findFirst().map(Account::getBalance).get();
     }
@@ -66,7 +85,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public double topUp(String iban, double amount) {
-        Account account = accountRepository.findAll().stream().filter(x -> x.getIban().equals(iban)).findFirst().get();
+        Account account = accountRepository.findAll().stream().filter(x -> x.getIban().equals(iban))
+                .findFirst().orElse(null);
+        if (account == null) throw new EntityNotFoundException(String.format("Account with iban %s not found", iban));
         account.setBalance(account.getBalance() + amount);
         account.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         accountRepository.save(account);
@@ -75,8 +96,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account update(Account account) {
-        Account entity = accountRepository.findAll().stream().filter(x -> x.getIban()
-                .equals(account.getIban())).findFirst().get();
+        Account entity = getById(account.getId());
         if (account.getName() != null) entity.setName(account.getName());
         if (account.getType() != null) entity.setType(account.getType());
         if (account.getStatus() != null) entity.setStatus(account.getStatus());
@@ -91,9 +111,13 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Transaction transferMoney(String iban1, String iban2, double amount) {
         Account debitAccount = accountRepository.findAll().stream()
-                .filter(x -> x.getIban().equals(iban1)).findFirst().get();
+                .filter(x -> x.getIban().equals(iban1)).findFirst().orElse(null);
         Account creditAccount = accountRepository.findAll().stream()
-                .filter(x -> x.getIban().equals(iban2)).findFirst().get();
+                .filter(x -> x.getIban().equals(iban2)).findFirst().orElse(null);
+        if (debitAccount == null)
+            throw new EntityNotFoundException(String.format("Account with iban %s not found", creditAccount.getIban()));
+        if (creditAccount == null)
+            throw new EntityNotFoundException(String.format("Account with iban %s not found", debitAccount.getIban()));
         long lastId;
         if (transactionService.getAll().isEmpty()) {
             lastId = 0L;
@@ -114,7 +138,8 @@ public class AccountServiceImpl implements AccountService {
         } else {
             transactionService.add(new Transaction(lastId + 1, debitAccount, creditAccount, Type.FAILED,
                     amount, "Failed", new Timestamp(System.currentTimeMillis())));
-            throw new IllegalArgumentException();
+            throw new NotEnoughMoneyException(String.format("Less money in account %s than %d",
+                    debitAccount.getIban(), amount));
         }
     }
 

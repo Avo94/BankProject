@@ -11,8 +11,8 @@ import org.telran.bankproject.com.entity.Product;
 import org.telran.bankproject.com.service.AccountService;
 import org.telran.bankproject.com.service.ProductService;
 
+import javax.persistence.EntityNotFoundException;
 import java.sql.Timestamp;
-import java.util.Comparator;
 
 @Component
 public class AgreementDtoConverter implements DtoConverter<Agreement, AgreementDto> {
@@ -37,13 +37,16 @@ public class AgreementDtoConverter implements DtoConverter<Agreement, AgreementD
 
     @Override
     public Agreement toEntity(AgreementDto agreementDto) {
-//        Account account = accountService.getAll().stream().filter(x -> x.getClient()
-//                .equals(agreementDto.getAccount().getClient())).findFirst().orElse(null);
-//        Product product = productService.getAll().stream().filter(x -> x.getManager().getClients()
-//                .equals(agreementDto.getAccount().getClient())).findFirst().orElse(null);
-
-        Account account = accountService.getAll().stream().filter(x -> x.getId() == 23L).findFirst().orElse(null);
-        Product product = productService.getAll().stream().filter(x -> x.getId() == 20L).findFirst().orElse(null);
+        if (agreementDto.getAccount() == null)
+            throw new EntityNotFoundException("The \"account\" field cannot be empty");
+        if (agreementDto.getProduct() == null)
+            throw new EntityNotFoundException("The \"account\" field cannot be empty");
+        Account account = accountService.getAll().stream().filter(x -> x.getClient()
+                .equals(agreementDto.getAccount().getClient())).findFirst().orElse(null);
+        Product product = productService.getAll().stream().filter(x -> x.getManager().getClients()
+                .equals(agreementDto.getAccount().getClient())).findFirst().orElse(null);
+        if (account == null) throw new EntityNotFoundException("Such account was not found in the database");
+        if (product == null) throw new EntityNotFoundException("Such product was not found in the database");
         return new Agreement(agreementDto.getId(), account, product, agreementDto.getInterestRate(),
                 agreementDto.getStatus(), agreementDto.getSum(), new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()));

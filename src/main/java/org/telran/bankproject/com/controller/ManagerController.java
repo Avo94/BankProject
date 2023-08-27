@@ -34,8 +34,8 @@ public class ManagerController {
         return managerConverter.toDto(managerService.add(managerConverter.toEntity(manager)));
     }
 
-    @DeleteMapping("/{id}")
-    public void remove(@PathVariable(name = "id") long id) {
-        managerService.remove(id);
+    @DeleteMapping
+    public void remove(@RequestBody ManagerDto manager) {
+        managerService.remove(managerService.getById(manager.getId()));
     }
 }

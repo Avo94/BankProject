@@ -1,5 +1,6 @@
 package org.telran.bankproject.com.service;
 
+import org.telran.bankproject.com.dto.TransactionDto;
 import org.telran.bankproject.com.entity.Account;
 import org.telran.bankproject.com.entity.Transaction;
 
@@ -10,6 +11,8 @@ public interface AccountService {
     List<Account> getAll();
 
     Account getById(long id);
+
+    List<Transaction> gatTransactions(String iban);
 
     double getBalance(String iban);
 

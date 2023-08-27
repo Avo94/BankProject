@@ -36,14 +36,9 @@ public class AccountController {
         return accountConverter.toDto(accountService.getById(id));
     }
 
-    @GetMapping("/transactions/{id}")
-    public List<TransactionDto> gatTransactionHistory(@PathVariable(name = "id") long id) {
-        List<TransactionDto> allTransactions = new ArrayList<>();
-        accountService.getById(id).getDebitTransactions().stream().map(x -> transactionConverter.toDto(x))
-                .forEach(allTransactions::add);
-        accountService.getById(id).getCreditTransactions().stream().map(x -> transactionConverter.toDto(x))
-                .forEach(allTransactions::add);
-        return allTransactions;
+    @GetMapping("/transactions/{iban}")
+    public List<TransactionDto> gatTransactionHistory(@PathVariable String iban) {
+        return accountService.gatTransactions(iban).stream().map(x->transactionConverter.toDto(x)).toList();
     }
 
     @GetMapping("/balance/{iban}")

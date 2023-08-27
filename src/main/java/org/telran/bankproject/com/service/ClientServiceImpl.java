@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.telran.bankproject.com.entity.Client;
 import org.telran.bankproject.com.repository.ClientRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
@@ -24,6 +25,8 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client getById(long id) {
+        Client client = clientRepository.findById(id).orElse(null);
+        if (client == null) throw new EntityNotFoundException(String.format("Client with id %d not found", id));
         return clientRepository.getReferenceById(id);
     }
 
@@ -35,7 +38,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client update(Client client) {
-        Client entity = clientRepository.getReferenceById(client.getId());
+        Client entity = getById(client.getId());
         if (client.getStatus() != null) entity.setStatus(client.getStatus());
         if (client.getTaxCode() != null) entity.setTaxCode(client.getTaxCode());
         if (client.getEmail() != null) entity.setEmail(client.getEmail());
@@ -47,7 +50,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void remove(Client client) {
-        client.getAccounts().forEach(x -> accountService.remove(x));
+        if (!client.getAccounts().isEmpty()) {
+            client.getAccounts().forEach(x -> accountService.remove(x));
+        }
         clientRepository.deleteAllByIdInBatch(Collections.singleton(client.getId()));
     }
 }

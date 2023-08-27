@@ -12,5 +12,5 @@ public interface ManagerService {
 
     Manager add(Manager manager);
 
-    void remove(long id);
+    void remove(Manager manager);
 }
