@@ -34,10 +34,11 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Transaction add(Transaction transaction) {
-         transaction.getDebitAccount().setDebitTransactions(List.of(transaction));
+        Transaction entity = transactionRepository.save(transaction);
+        transaction.getDebitAccount().setDebitTransactions(List.of(transaction));
         transaction.getCreditAccount().setCreditTransactions(List.of(transaction));
         log.debug("Call method save with transaction {}", transaction);
-        return transactionRepository.save(transaction);
+        return entity;
     }
 
     @Override

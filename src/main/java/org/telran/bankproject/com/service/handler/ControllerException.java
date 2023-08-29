@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 @ControllerAdvice
 public class ControllerException {
 
-    @ExceptionHandler
-    public ResponseEntity entityNotFoundException(EntityNotFoundException exception,
-                                                  HttpServletRequest request) {
-        return new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
-    }
+//    @ExceptionHandler
+//    public ResponseEntity entityNotFoundException(EntityNotFoundException exception,
+//                                                  HttpServletRequest request) {
+//        return new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
+//    }
 }

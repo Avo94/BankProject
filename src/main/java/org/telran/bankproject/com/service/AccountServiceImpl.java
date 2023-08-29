@@ -12,6 +12,7 @@ import org.telran.bankproject.com.repository.AccountRepository;
 import org.telran.bankproject.com.service.converter.currency.CurrencyConverter;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -77,6 +78,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional
     public Account add(Account account) {
         log.debug("Call method save with account {}", account);
         Account entity = accountRepository.save(account);
@@ -92,6 +94,7 @@ public class AccountServiceImpl implements AccountService {
                 null, account.getType() + " account", Status.ACTIVE, account.getCurrencyCode(),
                 account.getType().getRate(), account.getType().getLimit(), new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis())));
+
         log.debug("Call method add with product {}", product);
         return entity;
     }
@@ -125,6 +128,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional
     public Transaction transferMoney(String iban1, String iban2, double amount) {
         Account debitAccount = accountRepository.findAll().stream()
                 .filter(x -> x.getIban().equals(iban1)).findFirst().orElse(null);

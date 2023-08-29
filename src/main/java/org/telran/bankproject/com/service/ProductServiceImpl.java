@@ -48,19 +48,22 @@ public class ProductServiceImpl implements ProductService {
         log.debug("Call method add with product {}", product);
         Product entity = productRepository.save(product);
         entity.getManager().setProducts(List.of(product));
-//        Long lastId;
-//        if (agreementService.getAll().isEmpty()) {
-//            lastId = 0L;
-//        } else {
-//            lastId = agreementService.getAll().stream().map(Agreement::getId)
-//                    .max(Comparator.naturalOrder()).orElse(null);
-//        }
-//        Account account = product.getManager().getClients().stream().map(Client::getAccounts)
-//                .flatMap(Collection::stream).filter(x -> x.getId() == accountRepository.findAll()
-//                        .stream().map(Account::getId).max(Comparator.naturalOrder()).get()).findFirst().get();
-//        agreementService.add(new Agreement(lastId + 1, account, entity,
-//                entity.getInterestRate(), Status.ACTIVE, account.getBalance(),
-//                new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
+        Long lastId;
+        if (agreementService.getAll().isEmpty()) {
+            lastId = 0L;
+        } else {
+            lastId = agreementService.getAll().stream().map(Agreement::getId)
+                    .max(Comparator.naturalOrder()).orElse(null);
+        }
+        Account account = product.getManager().getClients().stream().map(Client::getAccounts)
+                .flatMap(Collection::stream).filter(x -> x.getId() == accountRepository.findAll()
+                        .stream().map(Account::getId).max(Comparator.naturalOrder()).get()).findFirst().get();
+        agreementService.add(new Agreement(lastId + 1, account, entity,
+                entity.getInterestRate(), Status.ACTIVE, account.getBalance(),
+                new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
+        new Agreement(lastId + 1, account, product, product.getInterestRate(),
+                Status.ACTIVE, account.getBalance(), new Timestamp(System.currentTimeMillis()),
+                new Timestamp(System.currentTimeMillis()));
         return entity;
     }
 
