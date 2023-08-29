@@ -12,5 +12,5 @@ public interface TransactionService {
 
     Transaction add(Transaction transaction);
 
-    void remove(long id);
+    void remove(Transaction transaction);
 }

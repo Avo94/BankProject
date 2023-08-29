@@ -1,5 +1,7 @@
 package org.telran.bankproject.com.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telran.bankproject.com.entity.*;
@@ -21,27 +23,29 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AccountRepository accountRepository;
-
     @Autowired
     private TransactionService transactionService;
-
     @Autowired
     private ProductService productService;
-
     @Autowired
     private AgreementService agreementService;
     @Autowired
     private CurrencyConverter converter;
+    private static final Logger log = LoggerFactory.getLogger(AccountServiceImpl.class);
 
     @Override
     public List<Account> getAll() {
-        return accountRepository.findAll();
+        log.debug("Call method findAll");
+        List<Account> all = accountRepository.findAll();
+        log.debug("Method findAll returned List with size {}", all.size());
+        return all;
     }
 
     @Override
     public Account getById(long id) {
         Account account = accountRepository.findById(id).orElse(null);
         if (account == null) throw new EntityNotFoundException(String.format("Client with id %d not found", id));
+        log.debug("Call method getReferenceById with id {}", id);
         return accountRepository.getReferenceById(id);
     }
 
@@ -51,8 +55,14 @@ public class AccountServiceImpl implements AccountService {
                 .findFirst().orElse(null);
         if (account == null) throw new EntityNotFoundException(String.format("Account with iban %s not found", iban));
         List<Transaction> allTransactions = new ArrayList<>();
+        log.debug("Call method getReferenceById for debitTransactions with id {}", account.getId());
         allTransactions.addAll(accountRepository.getReferenceById(account.getId()).getDebitTransactions());
+        int size = allTransactions.size();
+        log.debug("Method getReferenceById for debitTransactions returned {} transactions", size);
+        log.debug("Call method getReferenceById for creditTransactions with id {}", account.getId());
         allTransactions.addAll(accountRepository.getReferenceById(account.getId()).getCreditTransactions());
+        log.debug("Method getReferenceById for debitTransactions returned {} transactions",
+                allTransactions.size() - size);
         return allTransactions;
     }
 
@@ -61,12 +71,14 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository.findAll().stream().filter(x -> x.getIban().equals(iban))
                 .findFirst().orElse(null);
         if (account == null) throw new EntityNotFoundException(String.format("Account with iban %s not found", iban));
+        log.debug("Call method getBalance with account {}", account);
         return accountRepository.findAll().stream()
                 .filter(x -> x.getIban().equals(iban)).findFirst().map(Account::getBalance).get();
     }
 
     @Override
     public Account add(Account account) {
+        log.debug("Call method save with account {}", account);
         Account entity = accountRepository.save(account);
         entity.getClient().setAccounts(List.of(account));
         Long lastId;
@@ -76,10 +88,11 @@ public class AccountServiceImpl implements AccountService {
             lastId = productService.getAll().stream().map(Product::getId)
                     .max(Comparator.naturalOrder()).orElse(null);
         }
-        productService.add(new Product(lastId + 1, account.getClient().getManager(),
+        Product product = productService.add(new Product(lastId + 1, account.getClient().getManager(),
                 null, account.getType() + " account", Status.ACTIVE, account.getCurrencyCode(),
                 account.getType().getRate(), account.getType().getLimit(), new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis())));
+        log.debug("Call method add with product {}", product);
         return entity;
     }
 
@@ -88,8 +101,10 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository.findAll().stream().filter(x -> x.getIban().equals(iban))
                 .findFirst().orElse(null);
         if (account == null) throw new EntityNotFoundException(String.format("Account with iban %s not found", iban));
-        account.setBalance(account.getBalance() + amount);
+        double newBalance = account.getBalance() + amount;
+        account.setBalance(newBalance);
         account.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        log.debug("Call method save with balance {}", newBalance);
         accountRepository.save(account);
         return account.getBalance();
     }
@@ -105,6 +120,7 @@ public class AccountServiceImpl implements AccountService {
             entity.setBalance(converter.convert(entity, account, entity.getBalance()));
         }
         entity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        log.debug("Call method save with account {}", entity);
         return accountRepository.save(entity);
     }
 
@@ -131,10 +147,14 @@ public class AccountServiceImpl implements AccountService {
                     converter.convert(debitAccount, creditAccount, amount));
             debitAccount.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
             creditAccount.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+            log.debug("Call method save with account {}", debitAccount);
             accountRepository.save(debitAccount);
+            log.debug("Call method save with account {}", creditAccount);
             accountRepository.save(creditAccount);
-            return transactionService.add(new Transaction(lastId + 1, debitAccount, creditAccount,
+            Transaction transaction = transactionService.add(new Transaction(lastId + 1, debitAccount, creditAccount,
                     Type.SUCCESSFUL, amount, "Successful", new Timestamp(System.currentTimeMillis())));
+            log.debug("Call method add with transaction {}", transaction);
+            return transaction;
         } else {
             transactionService.add(new Transaction(lastId + 1, debitAccount, creditAccount, Type.FAILED,
                     amount, "Failed", new Timestamp(System.currentTimeMillis())));
@@ -147,9 +167,12 @@ public class AccountServiceImpl implements AccountService {
     public void remove(Account account) {
         if (account.getAgreement() != null) {
             Product product = account.getAgreement().getProduct();
+            log.debug("Call method remove with agreement {}", account.getAgreement());
             agreementService.remove(account.getAgreement());
+            log.debug("Call method remove with product {}", product);
             productService.remove(product);
         }
+        log.debug("Call method deleteAllByIdInBatch with account id {}", account.getId());
         accountRepository.deleteAllByIdInBatch(Collections.singleton(account.getId()));
     }
 }
