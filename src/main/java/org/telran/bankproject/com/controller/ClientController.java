@@ -16,11 +16,12 @@ import java.util.stream.Collectors;
 @RequestMapping("clients")
 public class ClientController {
 
+    private static final Logger log = LoggerFactory.getLogger(ClientController.class);
+
     @Autowired
     private ClientService clientService;
     @Autowired
     private DtoConverter<Client, ClientDto> clientConverter;
-    private static final Logger log = LoggerFactory.getLogger(ClientController.class);
 
     @GetMapping
     public List<ClientDto> getAll() {

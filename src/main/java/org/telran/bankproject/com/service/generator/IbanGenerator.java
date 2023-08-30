@@ -16,7 +16,7 @@ public class IbanGenerator {
     public String generate() {
         StringBuilder ibanConstructor = new StringBuilder();
         for (int i = 0; i < 16; i++) {
-            int digit = (int) (Math.random() * 10 - 1);
+            int digit = (int) (Math.random() * 9);
             ibanConstructor.append(digit);
         }
         String currentIban = ibanConstructor.toString();

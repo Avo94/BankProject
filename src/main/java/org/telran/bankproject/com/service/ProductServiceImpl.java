@@ -21,13 +21,14 @@ import java.util.List;
 @Service
 public class ProductServiceImpl implements ProductService {
 
+    private static final Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
+
     @Autowired
     private ProductRepository productRepository;
     @Autowired
     private AgreementService agreementService;
     @Autowired
     private AccountRepository accountRepository;
-    private static final Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     @Override
     public List<Product> getAll() {
@@ -47,7 +48,6 @@ public class ProductServiceImpl implements ProductService {
     public Product add(Product product) {
         log.debug("Call method add with product {}", product);
         Product entity = productRepository.save(product);
-        entity.getManager().setProducts(List.of(product));
         Long lastId;
         if (agreementService.getAll().isEmpty()) {
             lastId = 0L;
@@ -69,7 +69,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void remove(Product product) {
+        Product entity = getById(product.getId());
         log.debug("Call method deleteAllByIdInBatch with product id {}", product.getId());
-        productRepository.deleteAllByIdInBatch(Collections.singleton(product.getId()));
+        productRepository.deleteAllByIdInBatch(Collections.singleton(entity.getId()));
     }
 }

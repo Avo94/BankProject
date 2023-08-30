@@ -15,11 +15,12 @@ import java.util.List;
 @RequestMapping("managers")
 public class ManagerController {
 
+    private static final Logger log = LoggerFactory.getLogger(AccountController.class);
+
     @Autowired
     private ManagerService managerService;
     @Autowired
     private DtoConverter<Manager, ManagerDto> managerConverter;
-    private static final Logger log = LoggerFactory.getLogger(AccountController.class);
 
     @GetMapping
     public List<ManagerDto> getAll() {

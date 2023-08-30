@@ -9,6 +9,7 @@ import org.telran.bankproject.com.dto.TransactionDto;
 import org.telran.bankproject.com.entity.Account;
 import org.telran.bankproject.com.entity.Transaction;
 import org.telran.bankproject.com.service.AccountService;
+import org.telran.bankproject.com.service.TransactionService;
 import org.telran.bankproject.com.service.converter.DtoConverter;
 
 import java.util.*;
@@ -18,13 +19,16 @@ import java.util.stream.Collectors;
 @RequestMapping("accounts")
 public class AccountController {
 
+    private static final Logger log = LoggerFactory.getLogger(AccountController.class);
+
     @Autowired
     private AccountService accountService;
     @Autowired
     private DtoConverter<Account, AccountDto> accountConverter;
     @Autowired
     private DtoConverter<Transaction, TransactionDto> transactionConverter;
-    private static final Logger log = LoggerFactory.getLogger(AccountController.class);
+    @Autowired
+    private TransactionService transactionService;
 
     @GetMapping
     public List<AccountDto> getAll() {
@@ -40,8 +44,8 @@ public class AccountController {
     }
 
     @GetMapping("/transactions/{iban}")
-    public List<TransactionDto> gatTransactionHistory(@PathVariable String iban) {
-        log.debug("Call method gatTransactionHistory with iban {}", iban);
+    public List<TransactionDto> getTransactionHistory(@PathVariable String iban) {
+        log.debug("Call method getTransactionHistory with iban {}", iban);
         return accountService.gatTransactions(iban).stream().map(x -> transactionConverter.toDto(x)).toList();
     }
 
@@ -73,8 +77,8 @@ public class AccountController {
     public TransactionDto transferMoney(@PathVariable(name = "iban1") String debitAccount,
                                         @PathVariable(name = "iban2") String creditAccount,
                                         @PathVariable double amount) {
-        log.debug("Call method transferMoney with first iban {} and second iban {}", debitAccount, creditAccount);
-        return transactionConverter.toDto(accountService.transferMoney(debitAccount, creditAccount, amount));
+        log.debug("Call method transfer with first iban {} and second iban {}", debitAccount, creditAccount);
+        return transactionConverter.toDto(transactionService.transfer(debitAccount, creditAccount, amount));
     }
 
     @DeleteMapping

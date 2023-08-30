@@ -16,11 +16,12 @@ import java.util.List;
 @Service
 public class ClientServiceImpl implements ClientService {
 
+    private static final Logger log = LoggerFactory.getLogger(ClientServiceImpl.class);
+
     @Autowired
     private ClientRepository clientRepository;
     @Autowired
     private AccountService accountService;
-    private static final Logger log = LoggerFactory.getLogger(ClientServiceImpl.class);
 
     @Override
     public List<Client> getAll() {
@@ -40,7 +41,6 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client add(Client client) {
-        client.getManager().setClients(List.of(client));
         log.debug("Call method save with client {}", client);
         return clientRepository.save(client);
     }
@@ -60,12 +60,13 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void remove(Client client) {
-        if (!client.getAccounts().isEmpty()) {
-            List<Account> accounts = client.getAccounts();
+        Client entity = getById(client.getId());
+        if (!entity.getAccounts().isEmpty()) {
+            List<Account> accounts = entity.getAccounts();
             log.debug("Call method remove with accounts {}", accounts);
             accounts.forEach(x -> accountService.remove(x));
         }
-        log.debug("Call method deleteAllByIdInBatch with client id {}", client.getId());
-        clientRepository.deleteAllByIdInBatch(Collections.singleton(client.getId()));
+        log.debug("Call method deleteAllByIdInBatch with client id {}", entity.getId());
+        clientRepository.deleteAllByIdInBatch(Collections.singleton(entity.getId()));
     }
 }

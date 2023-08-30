@@ -1,9 +1,11 @@
 package org.telran.bankproject.com.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.telran.bankproject.com.enums.Status;
 
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ClientDto {
 
     private long id;

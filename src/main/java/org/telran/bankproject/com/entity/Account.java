@@ -5,6 +5,7 @@ import org.telran.bankproject.com.enums.Status;
 import org.telran.bankproject.com.enums.Type;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 

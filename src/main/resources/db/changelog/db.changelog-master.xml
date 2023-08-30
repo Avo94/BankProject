@@ -125,4 +125,8 @@
             <column name="updated_at" type="TIMESTAMP"/>
         </createTable>
     </changeSet>
+
+    <changeSet id="202308171856489" author="Iurii">
+        <modifyDataType tableName="transaction" columnName="type" newDataType="VARCHAR(10)"/>
+    </changeSet>
 </databaseChangeLog>

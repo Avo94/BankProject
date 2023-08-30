@@ -1,7 +1,9 @@
 package org.telran.bankproject.com.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.telran.bankproject.com.enums.CurrencyCode;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductDto {
 
     private long id;

@@ -1,11 +1,14 @@
 package org.telran.bankproject.com.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.telran.bankproject.com.enums.CurrencyCode;
 import org.telran.bankproject.com.enums.Status;
 import org.telran.bankproject.com.enums.Type;
 
+import java.math.BigDecimal;
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AccountDto {
 
     private long id;

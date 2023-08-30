@@ -13,6 +13,8 @@ import java.util.List;
 @Service
 public class AgreementServiceImpl implements AgreementService {
 
+    private static final Logger log = LoggerFactory.getLogger(AgreementServiceImpl.class);
+
     @Autowired
     private AgreementRepository agreementRepository;
     @Override
@@ -23,20 +25,17 @@ public class AgreementServiceImpl implements AgreementService {
     public Agreement getById(long id) {
         return agreementRepository.getReferenceById(id);
     }
-    private static final Logger log = LoggerFactory.getLogger(AgreementServiceImpl.class);
 
     @Override
     public Agreement add(Agreement agreement) {
         log.debug("Call method add with agreement {}", agreement);
-        Agreement entity = agreementRepository.save(agreement);
-        entity.getProduct().setAgreement(agreement);
-        entity.getAccount().setAgreement(agreement);
-        return entity;
+        return agreementRepository.save(agreement);
     }
 
     @Override
     public void remove(Agreement agreement) {
-        log.debug("Call method deleteAllByIdInBatch with agreement id {}", agreement.getId());
-        agreementRepository.deleteAllByIdInBatch(Collections.singleton(agreement.getId()));
+        Agreement entity = getById(agreement.getId());
+        log.debug("Call method deleteAllByIdInBatch with agreement id {}", entity.getId());
+        agreementRepository.deleteAllByIdInBatch(Collections.singleton(entity.getId()));
     }
 }

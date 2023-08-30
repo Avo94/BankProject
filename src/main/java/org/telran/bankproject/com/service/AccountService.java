@@ -12,6 +12,8 @@ public interface AccountService {
 
     Account getById(long id);
 
+    Account getByIban(String iban);
+
     List<Transaction> gatTransactions(String iban);
 
     double getBalance(String iban);
@@ -21,8 +23,6 @@ public interface AccountService {
     double topUp(String iban, double amount);
 
     Account update(Account account);
-
-    Transaction transferMoney(String iban1, String iban2, double amount);
 
     void remove(Account account);
 }

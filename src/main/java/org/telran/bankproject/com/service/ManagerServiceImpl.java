@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.telran.bankproject.com.entity.Account;
 import org.telran.bankproject.com.entity.Manager;
 import org.telran.bankproject.com.exceptions.NotRemovedDependenciesException;
 import org.telran.bankproject.com.repository.ManagerRepository;
@@ -16,9 +15,10 @@ import java.util.List;
 @Service
 public class ManagerServiceImpl implements ManagerService {
 
+    private static final Logger log = LoggerFactory.getLogger(ManagerServiceImpl.class);
+
     @Autowired
     private ManagerRepository managerRepository;
-    private static final Logger log = LoggerFactory.getLogger(ManagerServiceImpl.class);
 
     @Override
     public List<Manager> getAll() {
@@ -44,11 +44,12 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public void remove(Manager manager) {
-        if (!manager.getClients().isEmpty())
+        Manager entity = getById(manager.getId());
+        if (!entity.getClients().isEmpty())
             throw new NotRemovedDependenciesException("This manager still has clients");
-        if (!manager.getProducts().isEmpty())
+        if (!entity.getProducts().isEmpty())
             throw new NotRemovedDependenciesException("This manager still has products");
         log.debug("Call method deleteAllByIdInBatch with id {}", manager.getId());
-        managerRepository.deleteAllByIdInBatch(Collections.singleton(manager.getId()));
+        managerRepository.deleteAllByIdInBatch(Collections.singleton(entity.getId()));
     }
 }

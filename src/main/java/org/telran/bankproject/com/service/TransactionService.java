@@ -12,5 +12,7 @@ public interface TransactionService {
 
     Transaction add(Transaction transaction);
 
+    Transaction transfer(String iban1, String iban2, double amount);
+
     void remove(Transaction transaction);
 }
