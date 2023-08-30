@@ -77,7 +77,7 @@
                 <constraints foreignKeyName="transaction_account_two_fkey" referencedTableName="account"
                              referencedColumnNames="id" nullable="false"/>
             </column>
-            <column name="type" type="VARCHAR(8)"/>
+            <column name="type" type="VARCHAR(10)"/>
             <column name="amount" type="DECIMAL(12,4)"/>
             <column name="description" type="VARCHAR(255)"/>
             <column name="created_at" type="TIMESTAMP"/>
@@ -126,7 +126,71 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="202308171856489" author="Iurii">
-        <modifyDataType tableName="transaction" columnName="type" newDataType="VARCHAR(10)"/>
+    <changeSet id="202308301716480" author="Anton Vouk">
+        <comment>Fill manager table</comment>
+        <sql>
+            INSERT
+            manager(first_name, last_name, status, created_at, updated_at)
+            VALUES
+            ('Max', 'Maxov', 'ACTIVE', '2023-08-30 17:16:48', '2023-08-30 17:16:48'),
+	        ('Alex', 'Alexov', 'ACTIVE', '2023-08-30 17:16:50', '2023-08-30 17:16:50');
+        </sql>
+    </changeSet>
+
+    <changeSet id="202308301717021" author="Anton Vouk">
+        <comment>Fill manager table</comment>
+        <sql>
+            INSERT
+            product(manager_id, name, status, currency_code, interest_rate, product_limit, created_at, updated_at)
+            VALUES
+            (1, 'Basic Agreement', 'ACTIVE', 'USD', 8, 10000, '2023-08-30 17:17:02', '2023-08-30 17:17:02'),
+	        (1, 'Basic Agreement', 'ACTIVE', 'EUR', 8, 10000, '2023-08-30 17:17:55', '2023-08-30 17:17:55'),
+            (2, 'Luxury Agreement', 'ACTIVE', 'EUR', 13, 100000, '2023-08-30 17:18:30', '2023-08-30 17:18:30'),
+            (2, 'Luxury Agreement', 'ACTIVE', 'CHF', 13, 100000, '2023-08-30 17:18:58', '2023-08-30 17:18:58');
+        </sql>
+    </changeSet>
+
+    <changeSet id="202308301719439" author="Anton Vouk">
+        <comment>Fill manager table</comment>
+        <sql>
+            INSERT
+            client(manager_id, status, tax_code, first_name, last_name, email, address, phone, created_at, updated_at)
+            VALUES
+            (1, 'ACTIVE', 11235, 'Alla', 'Allova', 'allova@mail.ru', 'Brighton Beach, Brooklyn', '+1234567890',
+            '2023-08-30 17:19:44', '2023-08-30 17:19:44'),
+            (2, 'ACTIVE', '11214', 'Kseniya', 'Ksenevich', 'ksiysha@gmail.com', 'Bensonhurst, Brooklyn',
+            '+19876543210', '2023-08-30 17:20:00', '2023-08-30 17:20:00');
+        </sql>
+    </changeSet>
+
+    <changeSet id="202308301721011" author="Anton Vouk">
+        <comment>Fill manager table</comment>
+        <sql>
+            INSERT
+            account(client_id, name, iban, type, status, balance, currency_code, created_at, updated_at)
+            VALUES
+            (1, 'Standard account', 1234567890987654, 'STANDARD', 'ACTIVE', '10000', 'USD', '2023-08-30 17:21:01',
+            '2023-08-30 17:21:01'),
+            (1, 'Standard account', 2345678909876543, 'STANDARD', 'ACTIVE', '10000', 'EUR', '2023-08-30 17:21:44',
+            '2023-08-30 17:21:44'),
+            (2, 'Premium account', 3456789098765432, 'PREMIUM', 'ACTIVE', '100000', 'EUR', '2023-08-30 17:22:50',
+            '2023-08-30 17:22:50'),
+            (2, 'Premium account', 4567890987654321, 'PREMIUM', 'ACTIVE', '100000', 'CHF', '2023-08-30 17:22:59',
+            '2023-08-30 17:22:59');
+
+        </sql>
+    </changeSet>
+
+    <changeSet id="202308301723014" author="Anton Vouk">
+        <comment>Fill manager table</comment>
+        <sql>
+            INSERT
+            agreement(account_id, product_id, interest_rate, status, sum, created_at, updated_at)
+            VALUES
+            (1, 1, 8, 'ACTIVE', '10000', '2023-08-30 17:23:01', '2023-08-30 17:23:01'),
+            (2, 2, 8, 'ACTIVE', '10000', '2023-08-30 17:23:23', '2023-08-30 17:23:23'),
+            (3, 3, 13, 'ACTIVE', '100000', '2023-08-30 17:24:11', '2023-08-30 17:24:11'),
+            (4, 4, 13, 'ACTIVE', '100000', '2023-08-30 17:24:43', '2023-08-30 17:24:43');
+        </sql>
     </changeSet>
 </databaseChangeLog>

@@ -48,29 +48,18 @@ public class ProductServiceImpl implements ProductService {
     public Product add(Product product) {
         log.debug("Call method add with product {}", product);
         Product entity = productRepository.save(product);
-        Long lastId;
-        if (agreementService.getAll().isEmpty()) {
-            lastId = 0L;
-        } else {
-            lastId = agreementService.getAll().stream().map(Agreement::getId)
-                    .max(Comparator.naturalOrder()).orElse(null);
-        }
-        Account account = product.getManager().getClients().stream().map(Client::getAccounts)
-                .flatMap(Collection::stream).filter(x -> x.getId() == accountRepository.findAll()
-                        .stream().map(Account::getId).max(Comparator.naturalOrder()).get()).findFirst().get();
-        agreementService.add(new Agreement(lastId + 1, account, entity,
-                entity.getInterestRate(), Status.ACTIVE, account.getBalance(),
-                new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
-        new Agreement(lastId + 1, account, product, product.getInterestRate(),
-                Status.ACTIVE, account.getBalance(), new Timestamp(System.currentTimeMillis()),
-                new Timestamp(System.currentTimeMillis()));
+//        Account account = product.getManager().getClients().stream().map(Client::getAccounts)
+//                .flatMap(Collection::stream).filter(x -> x.getId() == accountRepository.findAll()
+//                        .stream().map(Account::getId).max(Comparator.naturalOrder()).get()).findFirst().get();
+//        agreementService.add(new Agreement(0, account, entity,
+//                entity.getInterestRate(), Status.ACTIVE, account.getBalance(),
+//                new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
         return entity;
     }
 
     @Override
     public void remove(Product product) {
-        Product entity = getById(product.getId());
-        log.debug("Call method deleteAllByIdInBatch with product id {}", product.getId());
-        productRepository.deleteAllByIdInBatch(Collections.singleton(entity.getId()));
+        log.debug("Call method delete with product id {}", product.getId());
+        productRepository.delete(product);
     }
 }

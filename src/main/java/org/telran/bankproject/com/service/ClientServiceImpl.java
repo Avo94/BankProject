@@ -67,6 +67,6 @@ public class ClientServiceImpl implements ClientService {
             accounts.forEach(x -> accountService.remove(x));
         }
         log.debug("Call method deleteAllByIdInBatch with client id {}", entity.getId());
-        clientRepository.deleteAllByIdInBatch(Collections.singleton(entity.getId()));
+        clientRepository.delete(client);
     }
 }

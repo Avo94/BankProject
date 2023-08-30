@@ -34,8 +34,7 @@ public class AgreementServiceImpl implements AgreementService {
 
     @Override
     public void remove(Agreement agreement) {
-        Agreement entity = getById(agreement.getId());
-        log.debug("Call method deleteAllByIdInBatch with agreement id {}", entity.getId());
-        agreementRepository.deleteAllByIdInBatch(Collections.singleton(entity.getId()));
+        log.debug("Call method delete with agreement id {}", agreement.getId());
+        agreementRepository.delete(agreement);
     }
 }

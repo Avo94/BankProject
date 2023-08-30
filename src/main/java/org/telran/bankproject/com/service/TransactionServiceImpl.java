@@ -61,15 +61,8 @@ public class TransactionServiceImpl implements TransactionService {
             throw new EntityNotFoundException(String.format("Account with iban %s not found", creditAccount.getIban()));
         if (creditAccount == null)
             throw new EntityNotFoundException(String.format("Account with iban %s not found", debitAccount.getIban()));
-        long lastId;
-        if (transactionRepository.findAll().isEmpty()) {
-            lastId = 0L;
-        } else {
-            lastId = transactionRepository.findAll().stream().map(Transaction::getId)
-                    .max(Comparator.naturalOrder()).get();
-        }
         if (debitAccount.getBalance() < amount) {
-            transactionRepository.save(new Transaction(lastId + 1, debitAccount, creditAccount, Type.FAILED,
+            transactionRepository.save(new Transaction(0, debitAccount, creditAccount, Type.FAILED,
                     amount, "Failed", new Timestamp(System.currentTimeMillis())));
             throw new NotEnoughMoneyException(String.format("Less money in account %s than %f",
                     debitAccount.getIban(), amount));
@@ -83,7 +76,7 @@ public class TransactionServiceImpl implements TransactionService {
         accountService.add(debitAccount);
         log.debug("Call method add with account {}", creditAccount);
         accountService.add(creditAccount);
-        Transaction transaction = transactionRepository.save(new Transaction(lastId + 1, debitAccount, creditAccount,
+        Transaction transaction = transactionRepository.save(new Transaction(0, debitAccount, creditAccount,
                 Type.SUCCESSFUL, amount, "Successful", new Timestamp(System.currentTimeMillis())));
         log.debug("Call method save with transaction {}", transaction);
         return transaction;
@@ -93,6 +86,6 @@ public class TransactionServiceImpl implements TransactionService {
     public void remove(Transaction transaction) {
         Transaction entity = getById(transaction.getId());
         log.debug("Call method deleteAllByIdInBatch with transaction id {}", transaction.getId());
-        transactionRepository.deleteById(entity.getId());
+        transactionRepository.delete(entity);
     }
 }

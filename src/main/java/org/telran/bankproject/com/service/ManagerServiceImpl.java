@@ -49,7 +49,7 @@ public class ManagerServiceImpl implements ManagerService {
             throw new NotRemovedDependenciesException("This manager still has clients");
         if (!entity.getProducts().isEmpty())
             throw new NotRemovedDependenciesException("This manager still has products");
-        log.debug("Call method deleteAllByIdInBatch with id {}", manager.getId());
-        managerRepository.deleteAllByIdInBatch(Collections.singleton(entity.getId()));
+        log.debug("Call method delete with manager id {}", manager.getId());
+        managerRepository.delete(manager);
     }
 }

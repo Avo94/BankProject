@@ -83,19 +83,11 @@ public class AccountServiceImpl implements AccountService {
     public Account add(Account account) {
         log.debug("Call method save with account {}", account);
         Account entity = accountRepository.save(account);
-        Long lastId;
-        if (productService.getAll().isEmpty()) {
-            lastId = 0L;
-        } else {
-            lastId = productService.getAll().stream().map(Product::getId)
-                    .max(Comparator.naturalOrder()).orElse(null);
-        }
-        Product product = productService.add(new Product(lastId + 1, account.getClient().getManager(),
-                null, account.getType() + " account", Status.ACTIVE, account.getCurrencyCode(),
-                account.getType().getRate(), account.getType().getLimit(), new Timestamp(System.currentTimeMillis()),
-                new Timestamp(System.currentTimeMillis())));
-
-        log.debug("Call method add with product {}", product);
+//        Product product = productService.add(new Product(0, account.getClient().getManager(),
+//                null, account.getType() + " account", Status.ACTIVE, account.getCurrencyCode(),
+//                account.getType().getRate(), account.getType().getLimit(), new Timestamp(System.currentTimeMillis()),
+//                new Timestamp(System.currentTimeMillis())));
+//        log.debug("Call method add with product {}", product);
         return entity;
     }
 
@@ -131,13 +123,11 @@ public class AccountServiceImpl implements AccountService {
     public void remove(Account account) {
         Account entity = getById(account.getId());
         if (entity.getAgreement() != null) {
-            Product product = entity.getAgreement().getProduct();
             log.debug("Call method remove with agreement {}", entity.getAgreement());
             agreementService.remove(entity.getAgreement());
-            log.debug("Call method remove with product {}", product);
-            productService.remove(product);
+        } else {
+            log.debug("Call method delete with account id {}", entity.getId());
+            accountRepository.delete(entity);
         }
-        log.debug("Call method deleteAllByIdInBatch with account id {}", entity.getId());
-        accountRepository.deleteAllByIdInBatch(Collections.singleton(entity.getId()));
     }
 }
