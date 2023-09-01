@@ -3,6 +3,7 @@ package org.telran.bankproject.com.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.telran.bankproject.com.dto.ClientDto;
 import org.telran.bankproject.com.entity.Client;
@@ -22,6 +23,8 @@ public class ClientController {
     private ClientService clientService;
     @Autowired
     private DtoConverter<Client, ClientDto> clientConverter;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping
     public List<ClientDto> getAll() {
@@ -37,6 +40,7 @@ public class ClientController {
 
     @PostMapping
     public ClientDto addClient(@RequestBody ClientDto client) {
+        client.setPassword(passwordEncoder.encode(client.getPassword()));
         log.debug("Call method addClient with client {}", client);
         return clientConverter.toDto(clientService.add(clientConverter.toEntity(client)));
     }
@@ -45,8 +49,8 @@ public class ClientController {
     public ClientDto statusTaxCodeEmailAddressPhoneUpdate(@RequestBody ClientDto client) {
         log.debug("Call method statusTaxCodeEmailAddressPhoneUpdate with client {}", client);
         return clientConverter.toDto(clientService.update(new Client(client.getId(), null, null,
-                client.getStatus(), client.getTaxCode(), null, null, client.getEmail(),
-                client.getAddress(), client.getPhone(), null, null)));
+                client.getStatus(), client.getTaxCode(), null, null, null, null,
+                client.getEmail(), client.getAddress(), client.getPhone(), null, null)));
     }
 
     @DeleteMapping

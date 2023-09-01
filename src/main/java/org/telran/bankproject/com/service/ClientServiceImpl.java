@@ -39,6 +39,10 @@ public class ClientServiceImpl implements ClientService {
         return clientRepository.getReferenceById(id);
     }
 
+    public Client getByLogin(String login) {
+        return clientRepository.findByLogin(login);
+    }
+
     @Override
     public Client add(Client client) {
         log.debug("Call method save with client {}", client);

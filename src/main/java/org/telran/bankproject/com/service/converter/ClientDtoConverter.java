@@ -32,7 +32,7 @@ public class ClientDtoConverter implements DtoConverter<Client, ClientDto> {
         return new ClientDto(client.getId(), new ManagerDto(client.getManager().getId(), null, null,
                 client.getManager().getFirstName(), client.getManager().getLastName(), client.getManager().getStatus()),
                 accounts, client.getStatus(), client.getTaxCode(), client.getFirstName(), client.getLastName(),
-                client.getEmail(), client.getAddress(), client.getPhone());
+                client.getLogin(), client.getPassword(), client.getEmail(), client.getAddress(), client.getPhone());
     }
 
     @Override
@@ -43,7 +43,8 @@ public class ClientDtoConverter implements DtoConverter<Client, ClientDto> {
                 .equals(client.getManager().getLastName())).findFirst().orElse(null);
         if (manager == null) throw new EntityNotFoundException("Such manager was not found in the database");
         return new Client(client.getId(), manager, null, client.getStatus(), client.getTaxCode(),
-                client.getFirstName(), client.getLastName(), client.getEmail(), client.getAddress(), client.getPhone(),
+                client.getFirstName(), client.getLastName(), client.getLogin(), client.getPassword(),
+                client.getEmail(), client.getAddress(), client.getPhone(),
                 new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
     }
 }

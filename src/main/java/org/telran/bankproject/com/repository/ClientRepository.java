@@ -6,5 +6,6 @@ import org.telran.bankproject.com.entity.Client;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
-//
+
+    Client findByLogin(String login);
 }
