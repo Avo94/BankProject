@@ -10,6 +10,7 @@ import org.telran.bankproject.com.repository.AccountRepository;
 import org.telran.bankproject.com.service.converter.currency.CurrencyConverter;
 
 import javax.persistence.EntityNotFoundException;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -76,19 +77,13 @@ public class AccountServiceImpl implements AccountService {
         if (account == null) throw new EntityNotFoundException(String.format("Account with iban %s not found", iban));
         log.debug("Call method getBalance with account {}", account);
         return accountRepository.findAll().stream()
-                .filter(x -> x.getIban().equals(iban)).findFirst().map(Account::getBalance).get();
+                .filter(x -> x.getIban().equals(iban)).findFirst().map(Account::getBalance).get().doubleValue();
     }
 
     @Override
     public Account add(Account account) {
         log.debug("Call method save with account {}", account);
-        Account entity = accountRepository.save(account);
-//        Product product = productService.add(new Product(0, account.getClient().getManager(),
-//                null, account.getType() + " account", Status.ACTIVE, account.getCurrencyCode(),
-//                account.getType().getRate(), account.getType().getLimit(), new Timestamp(System.currentTimeMillis()),
-//                new Timestamp(System.currentTimeMillis())));
-//        log.debug("Call method add with product {}", product);
-        return entity;
+        return accountRepository.save(account);
     }
 
     @Override
@@ -96,12 +91,12 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository.findAll().stream().filter(x -> x.getIban().equals(iban))
                 .findFirst().orElse(null);
         if (account == null) throw new EntityNotFoundException(String.format("Account with iban %s not found", iban));
-        double newBalance = account.getBalance() + amount;
+        BigDecimal newBalance = account.getBalance().add(BigDecimal.valueOf(amount));
         account.setBalance(newBalance);
         account.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         log.debug("Call method save with balance {}", newBalance);
         accountRepository.save(account);
-        return account.getBalance();
+        return account.getBalance().doubleValue();
     }
 
     @Override

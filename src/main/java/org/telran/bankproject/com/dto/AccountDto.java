@@ -20,12 +20,12 @@ public class AccountDto {
     private String iban;
     private Type type;
     private Status status;
-    private double balance;
+    private BigDecimal balance;
     private CurrencyCode currencyCode;
 
     public AccountDto(long id, ClientDto client, AgreementDto agreement, List<TransactionDto> debitTransactions,
                       List<TransactionDto> creditTransactions, String name, String iban, Type type, Status status,
-                      double balance, CurrencyCode currencyCode) {
+                      BigDecimal balance, CurrencyCode currencyCode) {
         this.id = id;
         this.client = client;
         this.agreement = agreement;
@@ -115,11 +115,11 @@ public class AccountDto {
         this.status = status;
     }
 
-    public double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 

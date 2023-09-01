@@ -10,7 +10,6 @@ import org.telran.bankproject.com.entity.*;
 import org.telran.bankproject.com.enums.Status;
 import org.telran.bankproject.com.service.AccountService;
 import org.telran.bankproject.com.service.AgreementService;
-import org.telran.bankproject.com.service.ProductService;
 import org.telran.bankproject.com.service.TransactionService;
 import org.telran.bankproject.com.service.converter.DtoConverter;
 
@@ -32,8 +31,6 @@ public class AccountController {
     private DtoConverter<Transaction, TransactionDto> transactionConverter;
     @Autowired
     private TransactionService transactionService;
-    @Autowired
-    private ProductService productService;
     @Autowired
     private AgreementService agreementService;
 
@@ -63,24 +60,19 @@ public class AccountController {
     }
 
     @PostMapping
-    public AccountDto addAccount(@RequestBody AccountDto account) {
-        log.debug("Call method addAccount with account {}", account);
-        Account entityAccount = accountService.add(accountConverter.toEntity(account));
-        Product product = new Product(0, entityAccount.getClient().getManager(),
-                null, entityAccount.getType() + " account", Status.ACTIVE,
-                entityAccount.getCurrencyCode(), entityAccount.getType().getRate(), entityAccount.getType().getLimit(),
+    public AccountDto addAccount(@RequestBody AccountDto accountdto) {
+        Account account = accountConverter.toEntity(accountdto);
+        Product product = new Product(0, account.getClient().getManager(),
+                null, account.getType() + " ACCOUNT", Status.ACTIVE,
+                account.getCurrencyCode(), account.getType().getRate(), account.getType().getLimit(),
                 new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
-        log.debug("Call method add with product {}", product);
-        Product entityProduct = productService.add(product);
-        Agreement agreement = new Agreement(0, entityAccount, entityProduct, entityProduct.getInterestRate(),
-                Status.ACTIVE, account.getBalance(), new Timestamp(System.currentTimeMillis()),
+        Agreement agreement = new Agreement(0, account, product, product.getInterestRate(),
+                Status.ACTIVE, account.getBalance().doubleValue(), new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()));
         log.debug("Call method add with agreement {}", agreement);
         Agreement entityAgreement = agreementService.add(agreement);
-        //-------------------З-Д-Е-С-Ь---------------------
-        entityAccount.setAgreement(entityAgreement);//    |
-        return accountConverter.toDto(entityAccount);//   |
-        //-------------------З-Д-Е-С-Ь---------------------
+        entityAgreement.getAccount().setAgreement(entityAgreement);
+        return accountConverter.toDto(entityAgreement.getAccount());
     }
 
     @PostMapping("topup/{iban}/{amount}")

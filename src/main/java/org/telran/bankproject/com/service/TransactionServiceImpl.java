@@ -13,6 +13,7 @@ import org.telran.bankproject.com.repository.TransactionRepository;
 import org.telran.bankproject.com.service.converter.currency.CurrencyConverter;
 
 import javax.persistence.EntityNotFoundException;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Comparator;
 import java.util.List;
@@ -61,15 +62,15 @@ public class TransactionServiceImpl implements TransactionService {
             throw new EntityNotFoundException(String.format("Account with iban %s not found", creditAccount.getIban()));
         if (creditAccount == null)
             throw new EntityNotFoundException(String.format("Account with iban %s not found", debitAccount.getIban()));
-        if (debitAccount.getBalance() < amount) {
+        if (debitAccount.getBalance().compareTo(BigDecimal.valueOf(amount)) < 0) {
             transactionRepository.save(new Transaction(0, debitAccount, creditAccount, Type.FAILED,
                     amount, "Failed", new Timestamp(System.currentTimeMillis())));
             throw new NotEnoughMoneyException(String.format("Less money in account %s than %f",
                     debitAccount.getIban(), amount));
         }
-        debitAccount.setBalance(debitAccount.getBalance() - amount);
-        creditAccount.setBalance(creditAccount.getBalance() +
-                CurrencyConverter.convert(debitAccount, creditAccount, amount));
+        debitAccount.setBalance(debitAccount.getBalance().subtract(BigDecimal.valueOf(amount)));
+        creditAccount.setBalance(creditAccount.getBalance().add(CurrencyConverter
+                .convert(debitAccount, creditAccount, BigDecimal.valueOf(amount))));
         debitAccount.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         creditAccount.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         log.debug("Call method add with account {}", debitAccount);

@@ -138,20 +138,20 @@
     </changeSet>
 
     <changeSet id="202308301717021" author="Anton Vouk">
-        <comment>Fill manager table</comment>
+        <comment>Fill product table</comment>
         <sql>
             INSERT
             product(manager_id, name, status, currency_code, interest_rate, product_limit, created_at, updated_at)
             VALUES
-            (1, 'Basic Agreement', 'ACTIVE', 'USD', 8, 10000, '2023-08-30 17:17:02', '2023-08-30 17:17:02'),
-	        (1, 'Basic Agreement', 'ACTIVE', 'EUR', 8, 10000, '2023-08-30 17:17:55', '2023-08-30 17:17:55'),
-            (2, 'Luxury Agreement', 'ACTIVE', 'EUR', 13, 100000, '2023-08-30 17:18:30', '2023-08-30 17:18:30'),
-            (2, 'Luxury Agreement', 'ACTIVE', 'CHF', 13, 100000, '2023-08-30 17:18:58', '2023-08-30 17:18:58');
+            (1, 'STANDARD ACCOUNT', 'ACTIVE', 'USD', 8, 10000, '2023-08-30 17:17:02', '2023-08-30 17:17:02'),
+	        (1, 'STANDARD ACCOUNT', 'ACTIVE', 'EUR', 8, 10000, '2023-08-30 17:17:55', '2023-08-30 17:17:55'),
+            (2, 'PREMIUM ACCOUNT', 'ACTIVE', 'EUR', 13, 100000, '2023-08-30 17:18:30', '2023-08-30 17:18:30'),
+            (2, 'PREMIUM ACCOUNT', 'ACTIVE', 'CHF', 13, 100000, '2023-08-30 17:18:58', '2023-08-30 17:18:58');
         </sql>
     </changeSet>
 
     <changeSet id="202308301719439" author="Anton Vouk">
-        <comment>Fill manager table</comment>
+        <comment>Fill client table</comment>
         <sql>
             INSERT
             client(manager_id, status, tax_code, first_name, last_name, email, address, phone, created_at, updated_at)
@@ -164,7 +164,7 @@
     </changeSet>
 
     <changeSet id="202308301721011" author="Anton Vouk">
-        <comment>Fill manager table</comment>
+        <comment>Fill account table</comment>
         <sql>
             INSERT
             account(client_id, name, iban, type, status, balance, currency_code, created_at, updated_at)
@@ -182,7 +182,7 @@
     </changeSet>
 
     <changeSet id="202308301723014" author="Anton Vouk">
-        <comment>Fill manager table</comment>
+        <comment>Fill agreement table</comment>
         <sql>
             INSERT
             agreement(account_id, product_id, interest_rate, status, sum, created_at, updated_at)

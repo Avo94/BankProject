@@ -47,14 +47,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product add(Product product) {
         log.debug("Call method add with product {}", product);
-        Product entity = productRepository.save(product);
-//        Account account = product.getManager().getClients().stream().map(Client::getAccounts)
-//                .flatMap(Collection::stream).filter(x -> x.getId() == accountRepository.findAll()
-//                        .stream().map(Account::getId).max(Comparator.naturalOrder()).get()).findFirst().get();
-//        agreementService.add(new Agreement(0, account, entity,
-//                entity.getInterestRate(), Status.ACTIVE, account.getBalance(),
-//                new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
-        return entity;
+        return productRepository.save(product);
     }
 
     @Override

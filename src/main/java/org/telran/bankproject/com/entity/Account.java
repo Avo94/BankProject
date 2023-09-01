@@ -30,7 +30,7 @@ public class Account {
     private Type type;
     @Enumerated(value = EnumType.STRING)
     private Status status;
-    private double balance;
+    private BigDecimal balance;
     @Enumerated(value = EnumType.STRING)
     private CurrencyCode currencyCode;
     private Timestamp createdAt;
@@ -38,7 +38,7 @@ public class Account {
 
     public Account(long id, Client client, Agreement agreement, List<Transaction> debitTransactions,
                    List<Transaction> creditTransactions, String name, String iban, Type type, Status status,
-                   double balance, CurrencyCode currencyCode, Timestamp createdAt, Timestamp updatedAt) {
+                   BigDecimal balance, CurrencyCode currencyCode, Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
         this.client = client;
         this.agreement = agreement;
@@ -130,11 +130,11 @@ public class Account {
         this.status = status;
     }
 
-    public double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 
