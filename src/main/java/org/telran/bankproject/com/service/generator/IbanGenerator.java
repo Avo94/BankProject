@@ -15,14 +15,18 @@ public class IbanGenerator {
 
     public String generate() {
         StringBuilder ibanConstructor = new StringBuilder();
+
         for (int i = 0; i < 16; i++) {
             int digit = (int) (Math.random() * 9);
             ibanConstructor.append(digit);
         }
+
         String currentIban = ibanConstructor.toString();
-        List<String> allIbans = accountService.getAll().stream().map(Account::getIban).toList();
+        List<String> allIbans = accountService.getAll()
+                .stream().map(Account::getIban).toList();
+
         for (String existingIban : allIbans) {
-            if (existingIban.equals(currentIban)) {
+            if (currentIban.equals(existingIban)) {
                 currentIban = generate();
             }
         }

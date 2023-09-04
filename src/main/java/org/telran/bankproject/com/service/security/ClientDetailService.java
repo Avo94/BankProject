@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.telran.bankproject.com.entity.Account;
 import org.telran.bankproject.com.entity.Client;
 import org.telran.bankproject.com.service.ClientService;
 
@@ -22,7 +21,9 @@ public class ClientDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Client client = clientService.getByLogin(username);
-        if (client == null) throw new UsernameNotFoundException("User with login " + username + " " + "not found");
+        if (client == null)
+            throw new UsernameNotFoundException("User with login " + username + " not found");
+
         return new User(client.getLogin(), client.getPassword(),
                 Arrays.asList(new SimpleGrantedAuthority("user")));
     }

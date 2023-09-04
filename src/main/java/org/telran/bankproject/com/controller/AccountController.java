@@ -36,9 +36,10 @@ public class AccountController {
 
     @GetMapping
     public List<AccountDto> getAll() {
+
         log.debug("Call method getAll");
-        return accountService.getAll().stream().map(account -> accountConverter.toDto(account))
-                .collect(Collectors.toList());
+        return accountService.getAll().stream()
+                .map(account -> accountConverter.toDto(account)).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
@@ -50,7 +51,8 @@ public class AccountController {
     @GetMapping("/transactions/{iban}")
     public List<TransactionDto> getTransactionHistory(@PathVariable String iban) {
         log.debug("Call method getTransactionHistory with iban {}", iban);
-        return accountService.gatTransactions(iban).stream().map(x -> transactionConverter.toDto(x)).toList();
+        return accountService.gatTransactions(iban).stream()
+                .map(x -> transactionConverter.toDto(x)).toList();
     }
 
     @GetMapping("/balance/{iban}")
@@ -62,16 +64,20 @@ public class AccountController {
     @PostMapping
     public AccountDto addAccount(@RequestBody AccountDto accountdto) {
         Account account = accountConverter.toEntity(accountdto);
+
         Product product = new Product(0, account.getClient().getManager(),
                 null, account.getType() + " ACCOUNT", Status.ACTIVE,
                 account.getCurrencyCode(), account.getType().getRate(), account.getType().getLimit(),
                 new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+
         Agreement agreement = new Agreement(0, account, product, product.getInterestRate(),
                 Status.ACTIVE, account.getBalance().doubleValue(), new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()));
+
         log.debug("Call method add with agreement {}", agreement);
         Agreement entityAgreement = agreementService.add(agreement);
         entityAgreement.getAccount().setAgreement(entityAgreement);
+
         return accountConverter.toDto(entityAgreement.getAccount());
     }
 

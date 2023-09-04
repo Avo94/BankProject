@@ -28,43 +28,41 @@ public class AccountDtoConverter implements DtoConverter<Account, AccountDto> {
     public AccountDto toDto(Account account) {
         List<TransactionDto> debitTransactions;
         List<TransactionDto> creditTransactions;
-        if (account.getDebitTransactions() == null) {
-            debitTransactions = null;
-        } else {
-            debitTransactions = account.getDebitTransactions().stream().map(x -> new TransactionDto(x.getId(),
-                    null, null, x.getType(), x.getAmount(), x.getDescription())).toList();
-        }
-        if (account.getCreditTransactions() == null) {
-            creditTransactions = null;
-        } else {
-            creditTransactions = account.getCreditTransactions().stream().map(x -> new TransactionDto(x.getId(),
-                    null, null, x.getType(), x.getAmount(), x.getDescription())).toList();
-        }
 
-        return new AccountDto(account.getId(), new ClientDto(account.getClient().getId(), null,
-                null, account.getClient().getStatus(), account.getClient().getTaxCode(),
-                account.getClient().getFirstName(), account.getClient().getLastName(), account.getClient().getEmail(),
-                account.getClient().getAddress(), account.getClient().getPhone()), new AgreementDto(
-                account.getAgreement().getId(), null, null, account.getAgreement().getInterestRate(),
-                account.getAgreement().getStatus(), account.getAgreement().getSum()), debitTransactions,
-                creditTransactions, account.getName(), account.getIban(), account.getType(), account.getStatus(),
-                account.getBalance(), account.getCurrencyCode());
+        if (account.getDebitTransactions() == null) debitTransactions = null;
+        else debitTransactions = account.getDebitTransactions().stream().map(x -> new TransactionDto(x.getId(),
+                null, null, x.getType(), x.getAmount(), x.getDescription())).toList();
+
+        if (account.getCreditTransactions() == null) creditTransactions = null;
+        else creditTransactions = account.getCreditTransactions().stream().map(x -> new TransactionDto(x.getId(),
+                null, null, x.getType(), x.getAmount(), x.getDescription())).toList();
+
+        return new AccountDto(account.getId(),
+                new ClientDto(account.getClient().getId(), null, null, account.getClient()
+                        .getStatus(), account.getClient().getTaxCode(), account.getClient().getFirstName(), account
+                        .getClient().getLastName(), account.getClient().getLogin(), null, account.getClient()
+                        .getEmail(), account.getClient().getAddress(), account.getClient().getPhone()),
+                new AgreementDto(account.getAgreement().getId(), null, null, account.getAgreement()
+                        .getInterestRate(), account.getAgreement().getStatus(), account.getAgreement().getSum()),
+                debitTransactions, creditTransactions, account.getName(), account.getIban(), account.getType(),
+                account.getStatus(), account.getBalance(), account.getCurrencyCode());
     }
 
     @Override
     public Account toEntity(AccountDto account) {
-        if (account.getIban() != null) {
-            return new Account(account.getId(), null, null, null, null,
-                    account.getName(), account.getIban(), account.getType(), account.getStatus(), account.getBalance(),
-                    account.getCurrencyCode(), null, null);
-        }
+        if (account.getIban() != null) return new Account(account.getId(), null, null,
+                null, null, account.getName(), account.getIban(), account.getType(),
+                account.getStatus(), account.getBalance(), account.getCurrencyCode(), null, null);
+
         if (account.getClient() == null) throw new EntityNotFoundException("The \"client\" field cannot be empty");
         Client client = clientService.getAll().stream().filter(x -> x.getFirstName().equals(account.getClient()
                 .getFirstName()) && x.getTaxCode().equals(account.getClient().getTaxCode())
                 && x.getEmail().equals(account.getClient().getEmail())).findFirst().orElse(null);
+
         if (client == null) throw new EntityNotFoundException("Such manager was not found in the database");
-        return new Account(account.getId(), client, null, null, null,
-                account.getName(), generator.generate(), account.getType(), account.getStatus(), account.getBalance(), account.getCurrencyCode(),
+        return new Account(account.getId(), client, null, null,
+                null, account.getName(), generator.generate(), account.getType(),
+                account.getStatus(), account.getBalance(), account.getCurrencyCode(),
                 new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
     }
 }

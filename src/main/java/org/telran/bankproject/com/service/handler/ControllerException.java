@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.telran.bankproject.com.exceptions.NotEnoughFieldsAreFilledException;
 import org.telran.bankproject.com.exceptions.NotEnoughMoneyException;
 import org.telran.bankproject.com.exceptions.NotRemovedDependenciesException;
 
@@ -14,20 +15,32 @@ import javax.servlet.http.HttpServletRequest;
 public class ControllerException {
 
     @ExceptionHandler
-    public ResponseEntity entityNotFoundException(EntityNotFoundException exception,
-                                                  HttpServletRequest request) {
+    public ResponseEntity entityNotFoundException(
+            EntityNotFoundException exception, HttpServletRequest request) {
         return new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
-    public ResponseEntity notEnoughMoneyException(NotEnoughMoneyException exception,
-                                                  HttpServletRequest request) {
+    public ResponseEntity notEnoughFieldsAreFilledException(
+            NotEnoughFieldsAreFilledException exception, HttpServletRequest request) {
+        return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity unsupportedOperationException(
+            UnsupportedOperationException exception, HttpServletRequest request) {
+        return new ResponseEntity(exception.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity notEnoughMoneyException(
+            NotEnoughMoneyException exception, HttpServletRequest request) {
         return new ResponseEntity(exception.getMessage(), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler
-    public ResponseEntity notRemovedDependenciesException(NotRemovedDependenciesException exception,
-                                                          HttpServletRequest request) {
+    public ResponseEntity notRemovedDependenciesException(
+            NotRemovedDependenciesException exception, HttpServletRequest request) {
         return new ResponseEntity(exception.getMessage(), HttpStatus.FAILED_DEPENDENCY);
     }
 }

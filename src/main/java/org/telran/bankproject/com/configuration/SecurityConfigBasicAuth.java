@@ -23,7 +23,7 @@ public class SecurityConfigBasicAuth extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/accounts").permitAll()
+                .antMatchers("/managers").permitAll()
                 .anyRequest().authenticated()
                 .and().httpBasic()
                 .and().sessionManagement().disable();

@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.telran.bankproject.com.dto.ClientDto;
 import org.telran.bankproject.com.entity.Client;
+import org.telran.bankproject.com.exceptions.NotEnoughFieldsAreFilledException;
 import org.telran.bankproject.com.service.ClientService;
 import org.telran.bankproject.com.service.converter.DtoConverter;
 
@@ -29,7 +30,8 @@ public class ClientController {
     @GetMapping
     public List<ClientDto> getAll() {
         log.debug("Call method getAll");
-        return clientService.getAll().stream().map(client -> clientConverter.toDto(client)).collect(Collectors.toList());
+        return clientService.getAll().stream()
+                .map(client -> clientConverter.toDto(client)).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
@@ -40,7 +42,10 @@ public class ClientController {
 
     @PostMapping
     public ClientDto addClient(@RequestBody ClientDto client) {
+        if (client.getPassword() == null)
+            throw new NotEnoughFieldsAreFilledException("The \"password\" field cannot be empty");
         client.setPassword(passwordEncoder.encode(client.getPassword()));
+
         log.debug("Call method addClient with client {}", client);
         return clientConverter.toDto(clientService.add(clientConverter.toEntity(client)));
     }

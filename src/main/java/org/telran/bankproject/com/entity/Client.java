@@ -30,9 +30,9 @@ public class Client {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    public Client(long id, Manager manager, List<Account> accounts, Status status, String taxCode, String firstName,
-                  String lastName, String login, String password, String email, String address, String phone,
-                  Timestamp createdAt, Timestamp updatedAt) {
+    public Client(long id, Manager manager, List<Account> accounts, Status status, String taxCode,
+                  String firstName, String lastName, String login, String password, String email,
+                  String address, String phone, Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
         this.manager = manager;
         this.accounts = accounts;

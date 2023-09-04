@@ -16,20 +16,16 @@ public class ManagerDtoConverter implements DtoConverter<Manager, ManagerDto> {
     public ManagerDto toDto(Manager manager) {
         List<ClientDto> clients;
         List<ProductDto> products;
-        if (manager.getClients() == null) {
-            clients = null;
-        } else {
-            clients = manager.getClients().stream().map(x -> new ClientDto(x.getId(), null,
-                    null, x.getStatus(), x.getTaxCode(), x.getFirstName(), x.getLastName(),
-                    x.getEmail(), x.getAddress(), x.getPhone())).toList();
-        }
-        if (manager.getProducts() == null) {
-            products = null;
-        } else {
-            products = manager.getProducts().stream().map(x -> new ProductDto(x.getId(), null,
-                    null, x.getName(), x.getCurrencyCode(), x.getInterestRate(),
-                    x.getProductLimit())).toList();
-        }
+
+        if (manager.getClients() == null) clients = null;
+        else clients = manager.getClients().stream().map(x -> new ClientDto(x.getId(), null,
+                null, x.getStatus(), x.getTaxCode(), x.getFirstName(), x.getLastName(), x.getLogin(),
+                null, x.getEmail(), x.getAddress(), x.getPhone())).toList();
+
+        if (manager.getProducts() == null) products = null;
+        else products = manager.getProducts().stream().map(x -> new ProductDto(x.getId(), null,
+                null, x.getName(), x.getCurrencyCode(), x.getInterestRate(), x.getProductLimit())).toList();
+
         return new ManagerDto(manager.getId(), clients, products, manager.getFirstName(),
                 manager.getLastName(), manager.getStatus());
     }

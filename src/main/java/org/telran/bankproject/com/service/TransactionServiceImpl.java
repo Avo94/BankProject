@@ -3,6 +3,7 @@ package org.telran.bankproject.com.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.telran.bankproject.com.entity.Account;
@@ -15,7 +16,6 @@ import org.telran.bankproject.com.service.converter.currency.CurrencyConverter;
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -32,6 +32,7 @@ public class TransactionServiceImpl implements TransactionService {
     public List<Transaction> getAll() {
         log.debug("Call method findAll");
         List<Transaction> all = transactionRepository.findAll();
+
         log.debug("Method findAll returned List with size {}", all.size());
         return all;
     }
@@ -41,6 +42,7 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction transaction = transactionRepository.findById(id).orElse(null);
         if (transaction == null)
             throw new EntityNotFoundException(String.format("Transaction with id %d not found", id));
+
         log.debug("Call method getReferenceById with id {}", id);
         return transactionRepository.getReferenceById(id);
     }
@@ -58,29 +60,38 @@ public class TransactionServiceImpl implements TransactionService {
                 .filter(x -> x.getIban().equals(iban1)).findFirst().orElse(null);
         Account creditAccount = accountService.getAll().stream()
                 .filter(x -> x.getIban().equals(iban2)).findFirst().orElse(null);
+
         if (debitAccount == null)
             throw new EntityNotFoundException(String.format("Account with iban %s not found", creditAccount.getIban()));
         if (creditAccount == null)
             throw new EntityNotFoundException(String.format("Account with iban %s not found", debitAccount.getIban()));
+
+        String login = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (!login.equals(debitAccount.getClient().getLogin()))
+            throw new UnsupportedOperationException("The operation is allowed to be carried out only on own accounts");
+
         if (debitAccount.getBalance().compareTo(BigDecimal.valueOf(amount)) < 0) {
             transactionRepository.save(new Transaction(0, debitAccount, creditAccount, Type.FAILED,
                     amount, "Failed", new Timestamp(System.currentTimeMillis())));
             throw new NotEnoughMoneyException(String.format("Less money in account %s than %f",
                     debitAccount.getIban(), amount));
         }
+
         debitAccount.setBalance(debitAccount.getBalance().subtract(BigDecimal.valueOf(amount)));
         creditAccount.setBalance(creditAccount.getBalance().add(CurrencyConverter
                 .convert(debitAccount, creditAccount, BigDecimal.valueOf(amount))));
         debitAccount.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         creditAccount.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
         log.debug("Call method add with account {}", debitAccount);
         accountService.add(debitAccount);
         log.debug("Call method add with account {}", creditAccount);
         accountService.add(creditAccount);
-        Transaction transaction = transactionRepository.save(new Transaction(0, debitAccount, creditAccount,
-                Type.SUCCESSFUL, amount, "Successful", new Timestamp(System.currentTimeMillis())));
+
+        Transaction transaction = new Transaction(0, debitAccount, creditAccount, Type.SUCCESSFUL,
+                amount, "Successful", new Timestamp(System.currentTimeMillis()));
         log.debug("Call method save with transaction {}", transaction);
-        return transaction;
+        return transactionRepository.save(transaction);
     }
 
     @Override
