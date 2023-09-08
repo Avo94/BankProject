@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.telran.bankproject.com.entity.Client;
 import org.telran.bankproject.com.service.ClientService;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class ClientDetailService implements UserDetailsService {
@@ -25,6 +25,6 @@ public class ClientDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("User with login " + username + " not found");
 
         return new User(client.getLogin(), client.getPassword(),
-                Arrays.asList(new SimpleGrantedAuthority("user")));
+                List.of(new SimpleGrantedAuthority("user")));
     }
 }

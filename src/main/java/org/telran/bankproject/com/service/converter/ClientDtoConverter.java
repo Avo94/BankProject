@@ -40,12 +40,13 @@ public class ClientDtoConverter implements DtoConverter<Client, ClientDto> {
 
     @Override
     public Client toEntity(ClientDto client) {
-        Manager manager = null;
-        if (client.getManager() != null) manager = managerService.getAll().stream().filter(x -> x.getFirstName()
+        if (client.getManager() == null)
+            throw new EntityNotFoundException("Such manager was not found in the database");
+
+        Manager manager = managerService.getAll().stream().filter(x -> x.getFirstName()
                 .equals(client.getManager().getFirstName()) && x.getLastName().equals(client.getManager()
                 .getLastName())).findFirst().orElse(null);
 
-        if (manager == null) throw new EntityNotFoundException("Such manager was not found in the database");
         return new Client(client.getId(), manager, null, client.getStatus(), client.getTaxCode(),
                 client.getFirstName(), client.getLastName(), loginGenerator.generate(client),
                 client.getPassword(), client.getEmail(), client.getAddress(), client.getPhone(),

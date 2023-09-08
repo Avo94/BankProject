@@ -3,7 +3,6 @@ package org.telran.bankproject.com.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -56,10 +55,9 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<Transaction> getTransactions(String iban) {
         Account account = getByIban(iban);
-        List<Transaction> allTransactions = new ArrayList<>();
 
         log.debug("Call method getReferenceById for debitTransactions with id {}", account.getId());
-        allTransactions.addAll(account.getDebitTransactions());
+        List<Transaction> allTransactions = new ArrayList<>(account.getDebitTransactions());
         int oldSize = allTransactions.size();
         log.debug("Method getReferenceById for debitTransactions returned {} transactions", oldSize);
 
