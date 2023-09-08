@@ -4,6 +4,7 @@ public enum Type {
 
     STANDARD,
     PREMIUM,
+
     SUCCESSFUL,
     FAILED;
 

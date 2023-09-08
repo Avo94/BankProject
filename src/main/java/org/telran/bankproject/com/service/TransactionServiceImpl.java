@@ -56,15 +56,8 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @Transactional
     public Transaction transfer(String iban1, String iban2, double amount) {
-        Account debitAccount = accountService.getAll().stream()
-                .filter(x -> x.getIban().equals(iban1)).findFirst().orElse(null);
-        Account creditAccount = accountService.getAll().stream()
-                .filter(x -> x.getIban().equals(iban2)).findFirst().orElse(null);
-
-        if (debitAccount == null)
-            throw new EntityNotFoundException(String.format("Account with iban %s not found", creditAccount.getIban()));
-        if (creditAccount == null)
-            throw new EntityNotFoundException(String.format("Account with iban %s not found", debitAccount.getIban()));
+        Account debitAccount = accountService.getByIban(iban1);
+        Account creditAccount = accountService.getByIban(iban2);
 
         String login = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!login.equals(debitAccount.getClient().getLogin()))

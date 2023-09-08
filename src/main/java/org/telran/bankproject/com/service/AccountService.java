@@ -13,7 +13,7 @@ public interface AccountService {
 
     Account getByIban(String iban);
 
-    List<Transaction> gatTransactions(String iban);
+    List<Transaction> getTransactions(String iban);
 
     double getBalance(String iban);
 

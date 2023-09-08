@@ -51,7 +51,7 @@ public class AccountController {
     @GetMapping("/transactions/{iban}")
     public List<TransactionDto> getTransactionHistory(@PathVariable String iban) {
         log.debug("Call method getTransactionHistory with iban {}", iban);
-        return accountService.gatTransactions(iban).stream()
+        return accountService.getTransactions(iban).stream()
                 .map(x -> transactionConverter.toDto(x)).toList();
     }
 

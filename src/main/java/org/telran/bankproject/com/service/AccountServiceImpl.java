@@ -3,6 +3,9 @@ package org.telran.bankproject.com.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.telran.bankproject.com.entity.*;
 import org.telran.bankproject.com.repository.AccountRepository;
@@ -51,36 +54,27 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<Transaction> gatTransactions(String iban) {
-        Account account = accountRepository.findAll().stream().filter(x -> x.getIban().equals(iban))
-                .findFirst().orElse(null);
-        if (account == null)
-            throw new EntityNotFoundException(String.format("Account with iban %s not found", iban));
-
+    public List<Transaction> getTransactions(String iban) {
+        Account account = getByIban(iban);
         List<Transaction> allTransactions = new ArrayList<>();
+
         log.debug("Call method getReferenceById for debitTransactions with id {}", account.getId());
-        allTransactions.addAll(accountRepository.getReferenceById(account.getId()).getDebitTransactions());
-        int size = allTransactions.size();
-        log.debug("Method getReferenceById for debitTransactions returned {} transactions", size);
+        allTransactions.addAll(account.getDebitTransactions());
+        int oldSize = allTransactions.size();
+        log.debug("Method getReferenceById for debitTransactions returned {} transactions", oldSize);
 
         log.debug("Call method getReferenceById for creditTransactions with id {}", account.getId());
-        allTransactions.addAll(accountRepository.getReferenceById(account.getId()).getCreditTransactions());
+        allTransactions.addAll(account.getCreditTransactions());
         log.debug("Method getReferenceById for debitTransactions returned {} transactions",
-                allTransactions.size() - size);
-
+                allTransactions.size() - oldSize);
         return allTransactions;
     }
 
     @Override
     public double getBalance(String iban) {
-        Account account = accountRepository.findAll().stream().filter(x -> x.getIban().equals(iban))
-                .findFirst().orElse(null);
-        if (account == null)
-            throw new EntityNotFoundException(String.format("Account with iban %s not found", iban));
+        Account account = getByIban(iban);
         log.debug("Call method getBalance with account {}", account);
-
-        return accountRepository.findAll().stream().filter(x -> x.getIban().equals(iban)).findFirst()
-                .map(Account::getBalance).get().doubleValue();
+        return account.getBalance().doubleValue();
     }
 
     @Override
@@ -91,10 +85,13 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public double topUp(String iban, double amount) {
-        Account account = accountRepository.findAll().stream().filter(x -> x.getIban().equals(iban))
-                .findFirst().orElse(null);
-        if (account == null)
-            throw new EntityNotFoundException(String.format("Account with iban %s not found", iban));
+        Account account = getByIban(iban);
+        String login = SecurityContextHolder.getContext().getAuthentication().getName();
+        SecurityContext context = SecurityContextHolder.getContext();
+        SecurityContextHolder.setContext(context);
+
+        if (!login.equals(account.getClient().getLogin()))
+            throw new UnsupportedOperationException("The operation is allowed to be carried out only on own accounts");
 
         BigDecimal newBalance = account.getBalance().add(BigDecimal.valueOf(amount));
         account.setBalance(newBalance);
