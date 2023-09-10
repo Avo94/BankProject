@@ -3,9 +3,9 @@ package org.telran.bankproject.com.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.telran.bankproject.com.entity.*;
 import org.telran.bankproject.com.repository.AccountRepository;
 import org.telran.bankproject.com.service.converter.currency.CurrencyConverter;
@@ -36,20 +36,17 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account getById(long id) {
-        log.debug("Call method findById with id {}", id);
-        Account account = accountRepository.findById(id).orElse(null);
-        if (account == null)
-            throw new EntityNotFoundException(String.format("Client with id %d not found", id));
+        accountRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException(String.format("Client with id %d not found", id)));
+        log.debug("Call method getReferenceById with id {}", id);
         return accountRepository.getReferenceById(id);
     }
 
     @Override
     public Account getByIban(String iban) {
         log.debug("Call method findByIban with iban {}", iban);
-        Account account = accountRepository.findByIban(iban).orElse(null);
-        if (account == null)
-            throw new EntityNotFoundException(String.format("Account with iban %s not found", iban));
-        return account;
+        return accountRepository.findByIban(iban).orElseThrow(() ->
+                new EntityNotFoundException(String.format("Account with iban %s not found", iban)));
     }
 
     @Override
@@ -85,8 +82,6 @@ public class AccountServiceImpl implements AccountService {
     public double topUp(String iban, double amount) {
         Account account = getByIban(iban);
         String login = SecurityContextHolder.getContext().getAuthentication().getName();
-        SecurityContext context = SecurityContextHolder.getContext();
-        SecurityContextHolder.setContext(context);
 
         if (!login.equals(account.getClient().getLogin()))
             throw new UnsupportedOperationException("The operation is allowed to be carried out only on own accounts");
@@ -117,9 +112,15 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.save(entity);
     }
 
+    @Transactional
     @Override
     public void remove(Account account) {
         Account entity = getById(account.getId());
+
+        if (!entity.getDebitTransactions().isEmpty())
+            entity.getDebitTransactions().forEach(x -> x.setDebitAccount(null));
+        if (!entity.getCreditTransactions().isEmpty())
+            entity.getCreditTransactions().forEach(x -> x.setCreditAccount(null));
 
         if (entity.getAgreement() != null) {
             log.debug("Call method remove with agreement {}", entity.getAgreement());

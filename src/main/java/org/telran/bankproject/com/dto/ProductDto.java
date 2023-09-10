@@ -1,6 +1,7 @@
 package org.telran.bankproject.com.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.telran.bankproject.com.enums.CurrencyCode;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -10,7 +11,9 @@ public class ProductDto {
     private ManagerDto manager;
     private AgreementDto agreement;
     private String name;
+    @Schema(description = "USD, UER or CHF",defaultValue = "USD")
     private CurrencyCode currencyCode;
+    @Schema(description = "8 or 13", defaultValue = "8")
     private double interestRate;
     private int productLimit;
 

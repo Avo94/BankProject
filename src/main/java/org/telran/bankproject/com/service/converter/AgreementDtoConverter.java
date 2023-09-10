@@ -44,12 +44,11 @@ public class AgreementDtoConverter implements DtoConverter<Agreement, AgreementD
             throw new EntityNotFoundException("The \"account\" field cannot be empty");
 
         Account account = accountService.getAll().stream().filter(x -> x.getClient()
-                .equals(agreementDto.getAccount().getClient())).findFirst().orElse(null);
+                .equals(agreementDto.getAccount().getClient())).findFirst().orElseThrow(() ->
+                new EntityNotFoundException("Such account was not found in the database"));
         Product product = productService.getAll().stream().filter(x -> x.getManager().getClients()
-                .equals(agreementDto.getAccount().getClient())).findFirst().orElse(null);
-
-        if (account == null) throw new EntityNotFoundException("Such account was not found in the database");
-        if (product == null) throw new EntityNotFoundException("Such product was not found in the database");
+                .equals(agreementDto.getAccount().getClient())).findFirst().orElseThrow(() ->
+                new EntityNotFoundException("Such product was not found in the database"));
 
         return new Agreement(agreementDto.getId(), account, product, agreementDto.getInterestRate(),
                 agreementDto.getStatus(), agreementDto.getSum(), new Timestamp(System.currentTimeMillis()),

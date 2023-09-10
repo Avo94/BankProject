@@ -73,11 +73,11 @@
             </column>
             <column name="debit_account_id" type="BIGINT">
                 <constraints foreignKeyName="transaction_account_one_fkey" referencedTableName="account"
-                             referencedColumnNames="id" nullable="false"/>
+                             referencedColumnNames="id" nullable="true"/>
             </column>
             <column name="credit_account_id" type="BIGINT">
                 <constraints foreignKeyName="transaction_account_two_fkey" referencedTableName="account"
-                             referencedColumnNames="id" nullable="false"/>
+                             referencedColumnNames="id" nullable="true"/>
             </column>
             <column name="type" type="VARCHAR(10)"/>
             <column name="amount" type="DECIMAL(12,4)"/>

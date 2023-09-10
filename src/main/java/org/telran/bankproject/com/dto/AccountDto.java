@@ -1,6 +1,7 @@
 package org.telran.bankproject.com.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.telran.bankproject.com.enums.CurrencyCode;
 import org.telran.bankproject.com.enums.Status;
 import org.telran.bankproject.com.enums.Type;
@@ -18,9 +19,12 @@ public class AccountDto {
     private List<TransactionDto> creditTransactions;
     private String name;
     private String iban;
+    @Schema(description = "STANDARD of PREMIUM",defaultValue = "STANDARD")
     private Type type;
+    @Schema(description = "ACTIVE of INACTIVE", defaultValue = "ACTIVE")
     private Status status;
     private BigDecimal balance;
+    @Schema(description = "USD, UER or CHF",defaultValue = "USD")
     private CurrencyCode currencyCode;
 
     public AccountDto(long id, ClientDto client, AgreementDto agreement, List<TransactionDto> debitTransactions,

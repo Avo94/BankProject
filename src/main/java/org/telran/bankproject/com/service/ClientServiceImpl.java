@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.telran.bankproject.com.entity.Account;
 import org.telran.bankproject.com.entity.Client;
 import org.telran.bankproject.com.repository.ClientRepository;
@@ -33,10 +34,8 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client getById(long id) {
-        Client client = clientRepository.findById(id).orElse(null);
-        if (client == null)
-            throw new EntityNotFoundException(String.format("Client with id %d not found", id));
-
+        clientRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException(String.format("Client with id %d not found", id)));
         log.debug("Call method getReferenceById with id {}", id);
         return clientRepository.getReferenceById(id);
     }
@@ -66,6 +65,7 @@ public class ClientServiceImpl implements ClientService {
         return clientRepository.save(entity);
     }
 
+    @Transactional
     @Override
     public void remove(Client client) {
         Client entity = getById(client.getId());

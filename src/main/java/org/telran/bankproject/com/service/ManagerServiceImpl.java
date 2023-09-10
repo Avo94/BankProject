@@ -30,10 +30,8 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public Manager getById(long id) {
-        Manager manager = managerRepository.findById(id).orElse(null);
-        if (manager == null)
-            throw new EntityNotFoundException(String.format("Manager with id %d not found", id));
-
+        managerRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException(String.format("Manager with id %d not found", id)));
         log.debug("Call method getReferenceById with id {}", id);
         return managerRepository.getReferenceById(id);
     }

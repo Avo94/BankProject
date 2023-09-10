@@ -18,16 +18,21 @@ public class AgreementServiceImpl implements AgreementService {
     private AgreementRepository agreementRepository;
     @Override
     public List<Agreement> getAll() {
-        return agreementRepository.findAll();
+        log.debug("Call method findAll");
+        List<Agreement> all = agreementRepository.findAll();
+
+        log.debug("Method findAll returned List with size {}", all.size());
+        return all;
     }
     @Override
     public Agreement getById(long id) {
+        log.debug("Call method getReferenceById with id {}", id);
         return agreementRepository.getReferenceById(id);
     }
 
     @Override
     public Agreement add(Agreement agreement) {
-        log.debug("Call method add with agreement {}", agreement);
+        log.debug("Call method save with agreement {}", agreement);
         return agreementRepository.save(agreement);
     }
 

@@ -45,7 +45,8 @@ public class ClientDtoConverter implements DtoConverter<Client, ClientDto> {
 
         Manager manager = managerService.getAll().stream().filter(x -> x.getFirstName()
                 .equals(client.getManager().getFirstName()) && x.getLastName().equals(client.getManager()
-                .getLastName())).findFirst().orElse(null);
+                .getLastName())).findFirst().orElseThrow(() ->
+                new EntityNotFoundException("Such manager was not found in the database"));
 
         return new Client(client.getId(), manager, null, client.getStatus(), client.getTaxCode(),
                 client.getFirstName(), client.getLastName(), loginGenerator.generate(client),

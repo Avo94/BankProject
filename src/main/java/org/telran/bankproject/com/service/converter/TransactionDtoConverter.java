@@ -40,14 +40,11 @@ public class TransactionDtoConverter implements DtoConverter<Transaction, Transa
             throw new EntityNotFoundException("The \"creditAccount\" field cannot be empty");
 
         Account debitAccount = accountService.getAll().stream().filter(x -> x.getId() ==
-                (transactionDto.getDebitAccount().getId())).findFirst().orElse(null);
+                (transactionDto.getDebitAccount().getId())).findFirst().orElseThrow(() ->
+                new EntityNotFoundException("Such debitAccount was not found in the database"));
         Account credirAccount = accountService.getAll().stream().filter(x -> x.getId() ==
-                (transactionDto.getCreditAccount().getId())).findFirst().orElse(null);
-
-        if (debitAccount == null)
-            throw new EntityNotFoundException("Such debitAccount was not found in the database");
-        if (credirAccount == null)
-            throw new EntityNotFoundException("Such creditAccount was not found in the database");
+                (transactionDto.getCreditAccount().getId())).findFirst().orElseThrow(() ->
+                new EntityNotFoundException("Such creditAccount was not found in the database"));
 
         return new Transaction(transactionDto.getId(), debitAccount, credirAccount, transactionDto.getType(),
                 transactionDto.getAmount(), transactionDto.getDescription(), new Timestamp(System.currentTimeMillis()));

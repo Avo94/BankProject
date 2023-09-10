@@ -1,6 +1,7 @@
 package org.telran.bankproject.com.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.telran.bankproject.com.enums.Status;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -9,7 +10,9 @@ public class AgreementDto {
     private long id;
     private AccountDto account;
     private ProductDto product;
+    @Schema(description = "8 or 13", defaultValue = "8")
     private double interestRate;
+    @Schema(description = "ACTIVE of INACTIVE", defaultValue = "ACTIVE")
     private Status status;
     private double sum;
 

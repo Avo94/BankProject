@@ -1,6 +1,7 @@
 package org.telran.bankproject.com.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.telran.bankproject.com.enums.Status;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class ManagerDto {
     private List<ProductDto> products = new ArrayList<>();
     private String firstName;
     private String lastName;
+    @Schema(description = "ACTIVE of INACTIVE", defaultValue = "ACTIVE")
     private Status status;
 
     public ManagerDto(long id, List<ClientDto> clients, List<ProductDto> products, String firstName,

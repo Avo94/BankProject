@@ -34,9 +34,9 @@ public class ProductDtoConverter implements DtoConverter<Product, ProductDto> {
         Manager manager = null;
         if (productDto.getManager() != null) manager = managerService.getAll().stream().filter(x -> x.getFirstName()
                 .equals(productDto.getManager().getFirstName()) && x.getLastName()
-                .equals(productDto.getManager().getLastName())).findFirst().orElse(null);
+                .equals(productDto.getManager().getLastName())).findFirst().orElseThrow(() ->
+                new EntityNotFoundException("Such manager was not found in the database"));
 
-        if (manager == null) throw new EntityNotFoundException("Such manager was not found in the database");
         return new Product(productDto.getId(), manager, null, productDto.getName(), Status.ACTIVE,
                 productDto.getCurrencyCode(), productDto.getInterestRate(), productDto.getProductLimit(),
                 new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));

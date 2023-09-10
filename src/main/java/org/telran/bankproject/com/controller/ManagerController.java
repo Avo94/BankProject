@@ -1,5 +1,8 @@
 package org.telran.bankproject.com.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.telran.bankproject.com.service.converter.DtoConverter;
 
 import java.util.List;
 
+@Tag(name="Manager Controller", description="CRUD operations on bank managers")
 @RestController
 @RequestMapping("managers")
 public class ManagerController {
@@ -22,24 +26,36 @@ public class ManagerController {
     @Autowired
     private DtoConverter<Manager, ManagerDto> managerConverter;
 
+    @Operation(summary = "List of managers",
+            description = "Allows you to get a list of all managers in the system")
+    @SecurityRequirement(name = "basicauth")
     @GetMapping
     public List<ManagerDto> getAll() {
         log.debug("Call method getAll");
         return managerService.getAll().stream().map(manager -> managerConverter.toDto(manager)).toList();
     }
 
+    @Operation(summary = "Find manager by ID",
+            description = "Allows you to find a manager in the system by its ID")
+    @SecurityRequirement(name = "basicauth")
     @GetMapping("/{id}")
     public ManagerDto getById(@PathVariable(name = "id") long id) {
         log.debug("Call method getById with id {}", id);
         return managerConverter.toDto(managerService.getById(id));
     }
 
+    @Operation(summary = "Add manager",
+            description = "Allows you to add a new manager in the system")
+    @SecurityRequirement(name = "basicauth")
     @PostMapping
     public ManagerDto addManager(@RequestBody ManagerDto manager) {
         log.debug("Call method addManager with manager {}", manager);
         return managerConverter.toDto(managerService.add(managerConverter.toEntity(manager)));
     }
 
+    @Operation(summary = "Delete manager",
+            description = "Allows you to delete an existing manager from the system")
+    @SecurityRequirement(name = "basicauth")
     @DeleteMapping
     public void remove(@RequestBody ManagerDto manager) {
         log.debug("Call method remove with manager {}", manager);

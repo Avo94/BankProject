@@ -1,6 +1,7 @@
 package org.telran.bankproject.com.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.telran.bankproject.com.enums.Type;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -9,6 +10,7 @@ public class TransactionDto {
     private long id;
     private AccountDto debitAccount;
     private AccountDto creditAccount;
+    @Schema(description = "SUCCESSFUL or FAILED")
     private Type type;
     private double amount;
     private String description;

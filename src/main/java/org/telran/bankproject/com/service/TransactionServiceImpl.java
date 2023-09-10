@@ -39,9 +39,8 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Transaction getById(long id) {
-        Transaction transaction = transactionRepository.findById(id).orElse(null);
-        if (transaction == null)
-            throw new EntityNotFoundException(String.format("Transaction with id %d not found", id));
+        transactionRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException(String.format("Transaction with id %d not found", id)));
 
         log.debug("Call method getReferenceById with id {}", id);
         return transactionRepository.getReferenceById(id);

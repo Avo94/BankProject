@@ -57,9 +57,9 @@ public class AccountDtoConverter implements DtoConverter<Account, AccountDto> {
         if (account.getClient() == null) throw new EntityNotFoundException("The \"client\" field cannot be empty");
         Client client = clientService.getAll().stream().filter(x -> x.getFirstName().equals(account.getClient()
                 .getFirstName()) && x.getTaxCode().equals(account.getClient().getTaxCode())
-                && x.getEmail().equals(account.getClient().getEmail())).findFirst().orElse(null);
+                && x.getEmail().equals(account.getClient().getEmail())).findFirst().orElseThrow(() ->
+                new EntityNotFoundException("Such manager was not found in the database"));
 
-        if (client == null) throw new EntityNotFoundException("Such manager was not found in the database");
         return new Account(account.getId(), client, null, null,
                 null, account.getName(), generator.generate(), account.getType(),
                 account.getStatus(), account.getBalance(), account.getCurrencyCode(),

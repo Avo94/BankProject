@@ -34,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product add(Product product) {
-        log.debug("Call method add with product {}", product);
+        log.debug("Call method save with product {}", product);
         return productRepository.save(product);
     }
 
