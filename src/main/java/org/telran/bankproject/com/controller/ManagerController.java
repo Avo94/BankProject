@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.telran.bankproject.com.dto.ManagerDto;
 import org.telran.bankproject.com.entity.Manager;
@@ -14,7 +16,7 @@ import org.telran.bankproject.com.service.converter.DtoConverter;
 
 import java.util.List;
 
-@Tag(name="Manager Controller", description="CRUD operations on bank managers")
+@Tag(name = "Manager Controller", description = "CRUD operations on bank managers")
 @RestController
 @RequestMapping("managers")
 public class ManagerController {
@@ -48,9 +50,10 @@ public class ManagerController {
             description = "Allows you to add a new manager in the system")
     @SecurityRequirement(name = "basicauth")
     @PostMapping
-    public ManagerDto addManager(@RequestBody ManagerDto manager) {
+    public ResponseEntity<ManagerDto> addManager(@RequestBody ManagerDto manager) {
         log.debug("Call method addManager with manager {}", manager);
-        return managerConverter.toDto(managerService.add(managerConverter.toEntity(manager)));
+        return new ResponseEntity<>(managerConverter.toDto(
+                managerService.add(managerConverter.toEntity(manager))), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Delete manager",

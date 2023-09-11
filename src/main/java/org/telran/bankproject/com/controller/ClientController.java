@@ -6,8 +6,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.telran.bankproject.com.dto.ClientDto;
 import org.telran.bankproject.com.entity.Client;
@@ -55,13 +56,14 @@ public class ClientController {
             description = "Allows you to add a new client for an existing manager in the system")
     @SecurityRequirement(name = "basicauth")
     @PostMapping
-    public ClientDto addClient(@RequestBody ClientDto client) {
+    public ResponseEntity<ClientDto> addClient(@RequestBody ClientDto client) {
         if (client.getPassword() == null)
             throw new NotEnoughFieldsAreFilledException("The \"password\" field cannot be empty");
         client.setPassword(passwordEncoder.encode(client.getPassword()));
 
         log.debug("Call method addClient with client {}", client);
-        return clientConverter.toDto(clientService.add(clientConverter.toEntity(client)));
+        return new ResponseEntity<>(clientConverter.toDto(
+                clientService.add(clientConverter.toEntity(client))), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update client",

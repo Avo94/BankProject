@@ -13,7 +13,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.telran.bankproject.com.entity.Account;
 import org.telran.bankproject.com.entity.Client;
 import org.telran.bankproject.com.entity.Transaction;
+import org.telran.bankproject.com.enums.CurrencyCode;
+import org.telran.bankproject.com.enums.Status;
+import org.telran.bankproject.com.enums.Type;
 import org.telran.bankproject.com.repository.AccountRepository;
+import org.telran.bankproject.com.service.converter.currency.CurrencyConverter;
 
 import java.math.BigDecimal;
 import java.util.List;

@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.telran.bankproject.com.dto.AccountDto;
 import org.telran.bankproject.com.dto.TransactionDto;
@@ -81,7 +83,7 @@ public class AccountController {
             description = "Allows you to add a new account for an existing client in the system")
     @SecurityRequirement(name = "basicauth")
     @PostMapping
-    public AccountDto addAccount(@RequestBody AccountDto accountdto) {
+    public ResponseEntity<AccountDto> addAccount(@RequestBody AccountDto accountdto) {
         Account account = accountConverter.toEntity(accountdto);
 
         Product product = new Product(0, account.getClient().getManager(),
@@ -97,7 +99,7 @@ public class AccountController {
         Agreement entityAgreement = agreementService.add(agreement);
         entityAgreement.getAccount().setAgreement(entityAgreement);
 
-        return accountConverter.toDto(entityAgreement.getAccount());
+        return new ResponseEntity<>(accountConverter.toDto(entityAgreement.getAccount()), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Top up your account",

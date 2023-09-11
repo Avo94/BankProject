@@ -15,32 +15,32 @@ import javax.servlet.http.HttpServletRequest;
 public class ControllerException {
 
     @ExceptionHandler
-    public ResponseEntity entityNotFoundException(
+    public ResponseEntity<String> entityNotFoundException(
             EntityNotFoundException exception, HttpServletRequest request) {
-        return new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
-    public ResponseEntity notEnoughFieldsAreFilledException(
+    public ResponseEntity<String> notEnoughFieldsAreFilledException(
             NotEnoughFieldsAreFilledException exception, HttpServletRequest request) {
-        return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
-    public ResponseEntity unsupportedOperationException(
+    public ResponseEntity<String> unsupportedOperationException(
             UnsupportedOperationException exception, HttpServletRequest request) {
-        return new ResponseEntity(exception.getMessage(), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler
-    public ResponseEntity notEnoughMoneyException(
+    public ResponseEntity<String> notEnoughMoneyException(
             NotEnoughMoneyException exception, HttpServletRequest request) {
-        return new ResponseEntity(exception.getMessage(), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler
-    public ResponseEntity notRemovedDependenciesException(
+    public ResponseEntity<String> notRemovedDependenciesException(
             NotRemovedDependenciesException exception, HttpServletRequest request) {
-        return new ResponseEntity(exception.getMessage(), HttpStatus.FAILED_DEPENDENCY);
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.FAILED_DEPENDENCY);
     }
 }

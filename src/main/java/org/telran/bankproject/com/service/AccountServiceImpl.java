@@ -97,7 +97,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account update(Account account) {
-        Account entity = getById(account.getId());
+        Account entity = getByIban(account.getIban());
 
         if (account.getName() != null) entity.setName(account.getName());
         if (account.getType() != null) entity.setType(account.getType());
