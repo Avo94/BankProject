@@ -1,39 +1,28 @@
 package org.telran.bankproject.com.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.telran.bankproject.com.service.security.ClientDetailService;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableConfigurationProperties
-public class SecurityConfigBasicAuth extends WebSecurityConfigurerAdapter {
+@EnableWebSecurity
+public class SecurityConfigBasicAuth {
 
-    @Autowired
-    private ClientDetailService clientDetailService;
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST,"/managers","/clients").permitAll()
+                .antMatchers(HttpMethod.POST, "/managers", "/clients").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .anyRequest().authenticated()
                 .and().httpBasic()
-                .and().sessionManagement().disable();
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(clientDetailService);
+                .and().sessionManagement().disable().build();
     }
 
     @Bean
