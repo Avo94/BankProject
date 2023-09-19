@@ -20,6 +20,7 @@ import org.telran.bankproject.com.entity.Account;
 import org.telran.bankproject.com.entity.Client;
 import org.telran.bankproject.com.entity.Manager;
 import org.telran.bankproject.com.enums.Status;
+import org.telran.bankproject.com.repository.ClientRepository;
 import org.telran.bankproject.com.service.ClientService;
 import org.telran.bankproject.com.service.converter.DtoConverter;
 
@@ -34,6 +35,8 @@ class ClientControllerTest {
     @MockBean
     private ClientService clientService;
     @MockBean
+    private ClientRepository clientRepository;
+    @MockBean
     private DtoConverter<Client, ClientDto> clientConverter;
     @MockBean
     private PasswordEncoder passwordEncoder;
@@ -42,16 +45,20 @@ class ClientControllerTest {
 
     @Test
     void statusTaxCodeEmailAddressPhoneUpdate() throws Exception {
-        Client client = new Client(1L, new Manager(), List.of(new Account()), Status.ACTIVE, "tax code",
+        Client client = new Client(0, new Manager(), List.of(new Account()), Status.ACTIVE, "tax code",
                 "first name", "last name", "login", "password", "email",
                 "address", "phone", null, null);
-        ClientDto clientDto = new ClientDto(client.getId(), new ManagerDto(), List.of(new AccountDto()), client.getStatus(),
+        Client clientFromBase = new Client(1L, new Manager(), List.of(new Account()), Status.ACTIVE,
                 client.getTaxCode(), client.getFirstName(), client.getLastName(), client.getLogin(),
-                client.getPassword(), client.getEmail(), client.getAddress(), client.getPhone());
+                client.getPassword(), client.getEmail(), client.getAddress(), client.getPhone(),
+                null, null);
+        ClientDto clientDto = new ClientDto(client.getId(), new ManagerDto(), List.of(new AccountDto()),
+                client.getStatus(), client.getTaxCode(), client.getFirstName(), client.getLastName(),
+                client.getLogin(), client.getPassword(), client.getEmail(), client.getAddress(), client.getPhone());
 
         Mockito.when(clientConverter.toEntity(clientDto)).thenReturn(client);
-        Mockito.when(clientService.update(client)).thenReturn(client);
-        Mockito.when(clientConverter.toDto(client)).thenReturn(clientDto);
+        Mockito.when(clientRepository.save(client)).thenReturn(clientFromBase);
+        Mockito.when(clientConverter.toDto(clientFromBase)).thenReturn(clientDto);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/clients/update")
                         .content(asJsonString(clientDto))
