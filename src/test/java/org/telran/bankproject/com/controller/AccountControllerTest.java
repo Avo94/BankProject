@@ -23,6 +23,7 @@ import org.telran.bankproject.com.entity.Transaction;
 import org.telran.bankproject.com.enums.CurrencyCode;
 import org.telran.bankproject.com.enums.Status;
 import org.telran.bankproject.com.enums.Type;
+import org.telran.bankproject.com.exceptions.NotEnoughMoneyException;
 import org.telran.bankproject.com.repository.AccountRepository;
 import org.telran.bankproject.com.service.AccountService;
 import org.telran.bankproject.com.service.AgreementService;
@@ -161,7 +162,8 @@ class AccountControllerTest {
                                 "1234567890987654", "2345678909876543", 10000)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.log())
-                .andExpect(MockMvcResultMatchers.status().isForbidden());
+                .andExpect(MockMvcResultMatchers.status().isForbidden())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof NotEnoughMoneyException));
     }
 
     private static String asJsonString(final Object obj) {
