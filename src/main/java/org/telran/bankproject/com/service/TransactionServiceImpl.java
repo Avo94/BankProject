@@ -57,14 +57,15 @@ public class TransactionServiceImpl implements TransactionService {
     public Transaction transfer(String iban1, String iban2, double amount) {
         Account debitAccount = accountService.getByIban(iban1);
         Account creditAccount = accountService.getByIban(iban2);
+        Transaction transaction = new Transaction(0, debitAccount, creditAccount, Type.FAILED,
+                amount, "Failed", new Timestamp(System.currentTimeMillis()));
 
         String login = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!login.equals(debitAccount.getClient().getLogin()))
             throw new UnsupportedOperationException("The operation is allowed to be carried out only on own accounts");
 
         if (debitAccount.getBalance().compareTo(BigDecimal.valueOf(amount)) < 0) {
-            transactionRepository.save(new Transaction(0, debitAccount, creditAccount, Type.FAILED,
-                    amount, "Failed", new Timestamp(System.currentTimeMillis())));
+            transactionRepository.save(transaction);
             throw new NotEnoughMoneyException(String.format("Less money in account %s than %f",
                     debitAccount.getIban(), amount));
         }
@@ -80,7 +81,7 @@ public class TransactionServiceImpl implements TransactionService {
         log.debug("Call method add with account {}", creditAccount);
         accountService.add(creditAccount);
 
-        Transaction transaction = new Transaction(0, debitAccount, creditAccount, Type.SUCCESSFUL,
+        transaction = new Transaction(0, debitAccount, creditAccount, Type.SUCCESSFUL,
                 amount, "Successful", new Timestamp(System.currentTimeMillis()));
         log.debug("Call method save with transaction {}", transaction);
         return transactionRepository.save(transaction);

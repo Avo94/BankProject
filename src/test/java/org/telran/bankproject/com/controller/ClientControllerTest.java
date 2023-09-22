@@ -16,9 +16,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.telran.bankproject.com.dto.AccountDto;
 import org.telran.bankproject.com.dto.ClientDto;
 import org.telran.bankproject.com.dto.ManagerDto;
-import org.telran.bankproject.com.entity.Account;
-import org.telran.bankproject.com.entity.Client;
-import org.telran.bankproject.com.entity.Manager;
+import org.telran.bankproject.com.entity.*;
 import org.telran.bankproject.com.enums.Status;
 import org.telran.bankproject.com.repository.ClientRepository;
 import org.telran.bankproject.com.service.ClientService;
@@ -45,28 +43,31 @@ class ClientControllerTest {
 
     @Test
     void statusTaxCodeEmailAddressPhoneUpdate() throws Exception {
-        Client client = new Client(0, new Manager(), List.of(new Account()), Status.ACTIVE, "tax code",
-                "first name", "last name", "login", "password", "email",
-                "address", "phone", null, null);
-        Client clientFromBase = new Client(1L, new Manager(), List.of(new Account()), Status.ACTIVE,
-                client.getTaxCode(), client.getFirstName(), client.getLastName(), client.getLogin(),
-                client.getPassword(), client.getEmail(), client.getAddress(), client.getPhone(),
+        ClientDto inputClient = new ClientDto(1, new ManagerDto(), List.of(new AccountDto()),
+                Status.ACTIVE, "12345", "Maxim", "Maximov",
+                "Max123", "12345678", "max@gmail.com", "12 Street", "+12345678");
+
+        Client client = new Client(inputClient.getId(), new Manager(), List.of(new Account()),
+                inputClient.getStatus(), inputClient.getTaxCode(), inputClient.getFirstName(),
+                inputClient.getLastName(), inputClient.getLogin(), inputClient.getPassword(),
+                inputClient.getEmail(), inputClient.getAddress(), inputClient.getPhone(),
                 null, null);
-        ClientDto clientDto = new ClientDto(client.getId(), new ManagerDto(), List.of(new AccountDto()),
+
+        ClientDto outputClient = new ClientDto(client.getId(), inputClient.getManager(), inputClient.getAccounts(),
                 client.getStatus(), client.getTaxCode(), client.getFirstName(), client.getLastName(),
                 client.getLogin(), client.getPassword(), client.getEmail(), client.getAddress(), client.getPhone());
 
-        Mockito.when(clientConverter.toEntity(clientDto)).thenReturn(client);
-        Mockito.when(clientRepository.save(client)).thenReturn(clientFromBase);
-        Mockito.when(clientConverter.toDto(clientFromBase)).thenReturn(clientDto);
+        Mockito.when(clientConverter.toEntity(inputClient)).thenReturn(client);
+        Mockito.when(clientService.update(Mockito.any(Client.class))).thenReturn(client);
+        Mockito.when(clientConverter.toDto(client)).thenReturn(outputClient);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/clients/update")
-                        .content(asJsonString(clientDto))
+                        .content(asJsonString(inputClient))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.log())
+                .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().json(asJsonString(clientDto)));
+                .andExpect(MockMvcResultMatchers.content().json(asJsonString(outputClient)));
     }
 
     private static String asJsonString(final Object obj) {

@@ -24,7 +24,6 @@ import org.telran.bankproject.com.enums.CurrencyCode;
 import org.telran.bankproject.com.enums.Status;
 import org.telran.bankproject.com.enums.Type;
 import org.telran.bankproject.com.repository.AccountRepository;
-import org.telran.bankproject.com.repository.TransactionRepository;
 import org.telran.bankproject.com.service.AccountService;
 import org.telran.bankproject.com.service.AgreementService;
 import org.telran.bankproject.com.service.TransactionService;
@@ -97,31 +96,35 @@ class AccountControllerTest {
                 .andExpect(MockMvcResultMatchers.content().string("10000.0"));
     }
 
-//    @Test
-//    void nameTypeStatusCurrencyCodUpdate() throws Exception {
-//        Account account = new Account(0, new Client(), new Agreement(), null, null,
-//                "Standard account", "1234567890987654", Type.STANDARD, Status.ACTIVE,
-//                BigDecimal.valueOf(9000.0), CurrencyCode.USD, null, null);
-//        Account accountFromBase = new Account(1L, new Client(), new Agreement(), null,
-//                null, "Standard account", "1234567890987654", Type.STANDARD,
-//                Status.ACTIVE, BigDecimal.valueOf(9000.0), CurrencyCode.USD, null, null);
-//        AccountDto accountDto = new AccountDto(accountFromBase.getId(), new ClientDto(), new AgreementDto(),
-//                null, null, accountFromBase.getName(), accountFromBase.getIban(),
-//                accountFromBase.getType(), accountFromBase.getStatus(), accountFromBase.getBalance(),
-//                accountFromBase.getCurrencyCode());
-//
-//        Mockito.when(accountConverter.toEntity(accountDto)).thenReturn(account);
-//        Mockito.when(accountRepository.save(account)).thenReturn(accountFromBase);
-//        Mockito.when(accountConverter.toDto(accountFromBase)).thenReturn(accountDto);
-//
-//        mockMvc.perform(MockMvcRequestBuilders.post("/accounts/update")
-//                        .content(asJsonString(accountDto))
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andDo(MockMvcResultHandlers.log())
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.content().json(asJsonString(accountDto)));
-//    }
+    @Test
+    void nameTypeStatusCurrencyCodUpdate() throws Exception {
+        AccountDto inputAccount = new AccountDto(1, new ClientDto(), new AgreementDto(),
+                null, null, "Standard account", "1234567890987654",
+                Type.STANDARD, Status.ACTIVE, BigDecimal.valueOf(9000.0), CurrencyCode.USD);
+
+        Account account = new Account(inputAccount.getId(), new Client(), new Agreement(),
+                List.of(new Transaction()), List.of(new Transaction()),
+                inputAccount.getName(), inputAccount.getIban(), inputAccount.getType(),
+                inputAccount.getStatus(), inputAccount.getBalance(),
+                inputAccount.getCurrencyCode(), null, null);
+
+        AccountDto outputAccount = new AccountDto(account.getId(), inputAccount.getClient(),
+                inputAccount.getAgreement(), inputAccount.getDebitTransactions(),
+                inputAccount.getCreditTransactions(), account.getName(), account.getIban(), account.getType(),
+                account.getStatus(), account.getBalance(), account.getCurrencyCode());
+
+        Mockito.when(accountConverter.toEntity(Mockito.any(AccountDto.class))).thenReturn(account);
+        Mockito.when(accountService.update(account)).thenReturn(account);
+        Mockito.when(accountConverter.toDto(account)).thenReturn(outputAccount);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/accounts/update")
+                        .content(asJsonString(inputAccount))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json(asJsonString(outputAccount)));
+    }
 
     @Test
     void transferMoney() throws Exception {
