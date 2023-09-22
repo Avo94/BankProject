@@ -145,6 +145,25 @@ class AccountControllerTest {
                 .andExpect(MockMvcResultMatchers.content().json(asJsonString(transactionDto)));
     }
 
+    @Test
+    void transferWithNotEnoughMoney() throws Exception {
+        Transaction transaction = new Transaction(1, new Account(), null,
+                Type.FAILED, 10000, "Failed", null);
+        transaction.getDebitAccount().setBalance(BigDecimal.valueOf(0));
+        TransactionDto transactionDto = new TransactionDto(transaction.getId(), new AccountDto(), new AccountDto(),
+                Type.FAILED, transaction.getAmount(), transaction.getDescription());
+
+        Mockito.when(transactionService.transfer("1234567890987654", "2345678909876543", 10000))
+                .thenReturn(transaction);
+        Mockito.when(transactionConverter.toDto(transaction)).thenReturn(transactionDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/accounts/transfer/{iban1}/{iban2}/{amount}",
+                                "1234567890987654", "2345678909876543", 10000)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.log())
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
     private static String asJsonString(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);

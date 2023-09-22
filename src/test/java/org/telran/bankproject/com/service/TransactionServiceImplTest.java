@@ -14,7 +14,6 @@ import org.telran.bankproject.com.entity.Account;
 import org.telran.bankproject.com.entity.Client;
 import org.telran.bankproject.com.entity.Transaction;
 import org.telran.bankproject.com.enums.CurrencyCode;
-import org.telran.bankproject.com.exceptions.NotEnoughMoneyException;
 import org.telran.bankproject.com.repository.TransactionRepository;
 
 import java.math.BigDecimal;
@@ -59,7 +58,7 @@ class TransactionServiceImplTest {
                 .when(accountService.getByIban(accountTwo.getIban()))
                 .thenReturn(accountTwo);
         Mockito
-                .lenient().when(transactionRepository.getReferenceById(1L))
+                .when(transactionRepository.save(Mockito.any(Transaction.class)))
                 .thenReturn(transaction);
     }
 
@@ -70,21 +69,10 @@ class TransactionServiceImplTest {
                 "$2a$10$.1n8bmOpgQfONOzjlEQG7uf0suE0wONxUlc5fgcQchqUU0s7Z20YC",
                 List.of(new SimpleGrantedAuthority("user"))));
 
-        transactionService.transfer("1234567890987654", "3456789098765432", 500);
-        Transaction transaction = transactionRepository.getReferenceById(1L);
+        Transaction transaction =
+                transactionService.transfer("1234567890987654", "3456789098765432", 500);
 
         assertEquals(9500.0, transaction.getDebitAccount().getBalance().doubleValue());
         assertEquals(100465.0, transaction.getCreditAccount().getBalance().doubleValue());
-    }
-
-    @Test
-    void transferWithNoEnoughMoney() {
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
-                "AAllova112",
-                "$2a$10$.1n8bmOpgQfONOzjlEQG7uf0suE0wONxUlc5fgcQchqUU0s7Z20YC",
-                List.of(new SimpleGrantedAuthority("user"))));
-
-        assertThrows(NotEnoughMoneyException.class,
-                () -> transactionService.transfer("1234567890987654", "3456789098765432", 500000));
     }
 }

@@ -1,7 +1,6 @@
 package org.telran.bankproject.com.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
@@ -14,6 +13,8 @@ import org.telran.bankproject.com.dto.AccountDto;
 import org.telran.bankproject.com.dto.TransactionDto;
 import org.telran.bankproject.com.entity.*;
 import org.telran.bankproject.com.enums.Status;
+import org.telran.bankproject.com.enums.Type;
+import org.telran.bankproject.com.exceptions.NotEnoughMoneyException;
 import org.telran.bankproject.com.service.AccountService;
 import org.telran.bankproject.com.service.AgreementService;
 import org.telran.bankproject.com.service.TransactionService;
@@ -128,7 +129,12 @@ public class AccountController {
                                         @PathVariable(name = "iban2") String creditAccount,
                                         @PathVariable double amount) {
         log.debug("Call method transfer with first iban {} and second iban {}", debitAccount, creditAccount);
-        return transactionConverter.toDto(transactionService.transfer(debitAccount, creditAccount, amount));
+        Transaction transfer = transactionService.transfer(debitAccount, creditAccount, amount);
+        if (transfer.getType().equals(Type.FAILED)) {
+            throw new NotEnoughMoneyException(String.format("Less money in account %s than %f",
+                    transfer.getDebitAccount().getIban(), amount));
+        }
+        return transactionConverter.toDto(transfer);
     }
 
     @Operation(summary = "Delete account",
